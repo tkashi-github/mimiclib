@@ -27,7 +27,8 @@
  */
 #include "mimiclib/include/mimicstring.h"
 
-extern inline uint32_t mimic_strlen(char pszStr[]);
+extern inline uint32_t mimic_strlen(const char pszStr[]);
 extern inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32DstSize);
+static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]);
 
 

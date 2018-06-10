@@ -25,16 +25,6 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-/*
- * Notes:
- * The MIMIC library is a library for learning, and it is created with reference 
- * to the C standard library. The purpose of learning is mainly as follows.
- * -> As small footprint as possible
- * -> Compliant with MISRA-C when possible
- * -> Learning Standard library for RTOS in C11
- * 
- * !!Tab is 4!!
- */
 #ifndef INCG_MIMIC_STRING_H
 #define INCG_MIMIC_STRING_H
 
@@ -49,7 +39,7 @@
 #define NULL	(0u)
 #endif
 
-static inline uint32_t mimic_strlen(char pszStr[]){
+static inline uint32_t mimic_strlen(const char pszStr[]){
 	/*-- var --*/
 	uint32_t u32Cnt = 0u;
 
@@ -80,4 +70,28 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32D
 
 	return szDst;
 }
+
+static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]){
+	/*-- var --*/
+	uint32_t u32Cnt = 0u;
+	_Bool bret = false;
+
+	/*-- begin --*/
+	if((szStr1 != NULL) && (szStr2 != NULL)){
+		bret = true;
+		for(;;){
+			if(szStr1[u32Cnt] != szStr2[u32Cnt]){
+				bret = false;
+				break;
+			}
+			if(szStr1[u32Cnt] == '\0'){
+				break;
+			}
+			u32Cnt++;
+		}
+	}
+
+	return bret;
+}
+
 #endif
