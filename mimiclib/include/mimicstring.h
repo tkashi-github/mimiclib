@@ -88,6 +88,13 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32D
 	return szDst;
 }
 
+/**
+* @brief strcmp
+* @param[in]const char szStr1[]
+* @param[in]const char szStr2[]
+* @return true str1 == str2
+* @return false str1 != str2
+*/
 static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]){
 	/*-- var --*/
 	uint32_t u32Cnt = 0u;
@@ -111,35 +118,37 @@ static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]){
 	return bret;
 }
 
+/**
+* @brief strtok_s
+* @param[in] char szStr[]
+* @param[in] const char szDelm[]
+* @param[out]  char **ctx
+* @return char * ï™äÑå„ÇÃï∂éöóÒÅBNULLÇ≈èIóπ
+*/
 static inline char *mimic_strtok(char szStr[], const char szDelm[], char **ctx){
 	/*-- var --*/
 	char *pret = NULL;
-	uint32_t u32=0u;
 
 	/*-- begin --*/
 	if(szDelm != NULL){
+		char *pszTmp;
+		uint32_t u32=0u;
+		
 		uint32_t delmLen = mimic_strlen(szDelm);
 
-		if(szStr != NULL){
-			while(szStr[u32] != '\0'){
-				if(mimic_memcmp((uintptr_t)&szStr[u32], (uintptr_t)szDelm, delmLen) != false){
-					szStr[u32] = '\0';
-					*ctx = &szStr[u32 + delmLen]; 
-				}
-				u32++;
-			}
-			pret = szStr;
+		if(szStr == NULL){
+			pszTmp = *ctx;
 		}else{
-			char *pszTmp = *ctx;
-			while(pszTmp[u32] != '\0'){
-				if(mimic_memcmp((uintptr_t)&pszTmp[u32], (uintptr_t)szDelm, delmLen) != false){
-					pszTmp[u32] = '\0';
-					*ctx = &pszTmp[u32 + delmLen]; 
-				}
-				u32++;
-			}
-			pret = szStr;
+			pszTmp = pszTmp;
 		}
+		while(pszTmp[u32] != '\0'){
+			if(mimic_memcmp((uintptr_t)&pszTmp[u32], (uintptr_t)szDelm, delmLen) != false){
+				pszTmp[u32] = '\0';
+				*ctx = &pszTmp[u32 + delmLen]; 
+			}
+			u32++;
+		}
+		pret = szStr;
 	}
 	return pret;
 }
