@@ -25,7 +25,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "mimiclib/include/mimicstring.h"
+#include "mimicstring.h"
 
 extern inline uint32_t mimic_strlen(const char pszStr[]);
 extern inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32DstSize);

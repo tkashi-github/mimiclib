@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.11)
 project(mimiclib_unit_test C)
-include_directories(./include)
-add_definitions("-Wall -std=c++11 -DWIN_TEST") # <= new
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I./include -Wall -std=c11 -DWIN_TEST")
 add_executable(mimic_test.exe
   ./source/main.c
   ./source/mimicstring.c

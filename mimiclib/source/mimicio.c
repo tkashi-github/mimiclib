@@ -10,9 +10,11 @@
 #define INCG_MIMICIO_H
 
 #include "mimicio.h"
-#ifdef DWIN_TEST
+#include <stdarg.h>
+#ifdef WIN_TEST
 #include <stdio.h>	//	TODO çÌèúÇ∑ÇÈ
 #include <stdlib.h>	//	TODO çÌèúÇ∑ÇÈ
+#include <string.h>
 #endif
 
 void mimic_printf(const char* fmt, ...){
@@ -20,12 +22,12 @@ void mimic_printf(const char* fmt, ...){
 	char szBuffer[1024];
 
 	va_start(arg, fmt);
-#ifdef DWIN_TEST
-	vsnprintf(szBuffer, sizeog(szBuffer), fmt, arg);
+#ifdef WIN_TEST
+	vsnprintf(szBuffer, sizeof(szBuffer), fmt, arg);
 #endif
 	va_end(arg);
 	
-#ifdef DWIN_TEST
+#ifdef WIN_TEST
 	puts(szBuffer);
 #endif
 }
