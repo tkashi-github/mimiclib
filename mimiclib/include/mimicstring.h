@@ -44,7 +44,10 @@ static inline _Bool mimic_memcmp(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt
 	uint8_t *pu81 = (uint8_t*)p1;
 	uint8_t *pu82 = (uint8_t*)p2;
 	_Bool bret = false;
-
+	if((p1 == NULL) || (p2 == NULL){
+		bret = false;
+		ggptp _EMD;
+	}
 	/*-- begin --*/
 	for(uint32_t i=0u;i<u32ByteCnt;i++){
 		if(pu81[i] != pu82[i]){
@@ -52,7 +55,7 @@ static inline _Bool mimic_memcmp(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt
 			break;
 		}
 	}
-
+_END
 	return bret;
 }
 
