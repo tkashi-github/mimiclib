@@ -34,41 +34,58 @@
 #define TEST_STRING2	"0123456789\r\n"
 #define TEST_STRING3	"cmd 00 11 222 333 444 555 666\r\n"
 
-int main(int argc, char *argv[]){
+static void UnitTeset(void);
 
+static const char *s_pszArgTest[] = {
+	"cmd",
+	"00",
+	"11",
+	"222",
+	"333",
+	"444",
+	"555",
+	"666\r\n",
+};
+
+
+int main(int argc, char *argv[]){
+	UnitTeset();
+	return 0;
+}
+
+static void UnitTeset(void){
 	// Addo Unit Test Here
 	{
 		mimic_printf("TEST suite :mimic_memcmp\r\n");
-		mimic_printf("TEST CASE 1-1 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"11\", 2) == false");
-		mimic_printf("RESULT        : %s", mimic_memcmp((uintptr_t)"00", (uintptr_t)"11", 2)? "NG":"OK");
-		mimic_printf("TEST CASE 1-2 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"00\", 2) != true");
-		mimic_printf("RESULT        : %s", mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2)? "OK":"NG");
-		mimic_printf("TEST CASE 1-3 : mimic_memcmp((uintptr_t)\"123\", (uintptr_t)\"12\", 3) != true");
-		mimic_printf("RESULT        : %s", mimic_memcmp((uintptr_t)"123", (uintptr_t)"12", 3)? "OK":"NG");
+		mimic_printf("TEST CASE 1-1 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"11\", 2) == false\r\n");
+		mimic_printf("RESULT        : %s\r\n", mimic_memcmp((uintptr_t)"00", (uintptr_t)"11", 2)? "NG":"OK");
+		mimic_printf("TEST CASE 1-2 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"00\", 2) != true\r\n");
+		mimic_printf("RESULT        : %s\r\n", mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2)? "OK":"NG");
+		mimic_printf("TEST CASE 1-3 : mimic_memcmp((uintptr_t)\"123\", (uintptr_t)\"12\", 3) != true\r\n");
+		mimic_printf("RESULT        : %s\r\n", mimic_memcmp((uintptr_t)"123", (uintptr_t)"12", 3)? "OK":"NG");
 	}
 	{
 		mimic_printf("TEST suite :mimic_strlen\r\n");
-		mimic_printf("TEST CASE 2-1 : mimic_strlen(%s) == 10u", TEST_STRING1);
-		mimic_printf("RESULT        : %s", mimic_strlen(TEST_STRING1) == 10u ? "OK":"NG");
-		mimic_printf("TEST CASE 2-2 : mimic_strlen(%s) == 12u", TEST_STRING2);
-		mimic_printf("RESULT        : %s", mimic_strlen(TEST_STRING2) == 12u ? "OK":"NG");
+		mimic_printf("TEST CASE 2-1 : mimic_strlen(%s) == 10u\r\n", TEST_STRING1);
+		mimic_printf("RESULT        : %s\r\n", mimic_strlen(TEST_STRING1) == 10u ? "OK":"NG");
+		mimic_printf("TEST CASE 2-2 : mimic_strlen(%s) == 12u\r\n", TEST_STRING2);
+		mimic_printf("RESULT        : %s\r\n", mimic_strlen(TEST_STRING2) == 12u ? "OK":"NG");
 	}
 
 	{
 		char szStr[256];
 		char *ctx;
 		char *pszStr;
-		uint32_t argc = 0;
+		
 		mimic_strcpy(szStr, TEST_STRING3, 256);
 
 		pszStr = mimic_strtok(szStr, " ", &ctx);
-
-		while(pszStr != NULL){
-			mimic_printf("arg[%02u] %s <%s>\r\n", argc, pszStr, ctx);
-			argc++;
+		mimic_printf("szStr = %s\r\n", szStr);
+		for(uint32_t i=0u;i<sizeof(s_pszArgTest)/sizeof(char*);i++){
+			mimic_printf("arg[%02u] %s\r\n", i, pszStr);
+			mimic_printf("mimic_strcmp  : %s\r\n", mimic_strcmp(pszStr, s_pszArgTest[i]) ? "OK":"NG");
 			pszStr = mimic_strtok(NULL, " ", &ctx);
 		}
 	}
-	
-	return 0;
+
 }
