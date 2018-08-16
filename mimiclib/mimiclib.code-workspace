@@ -1,8 +1,15 @@
 {
 	"folders": [
 		{
-			"path": "D:\\Workspace\\nucleo\\mimiclib"
+			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.encoding": "utf8",
+		"C_Cpp.default.cStandard": "c11",
+		"C_Cpp.default.includePath": [
+			"${workspaceFolder}/include",
+			"${workspaceFolder}/source",
+		],		
+	}
 }

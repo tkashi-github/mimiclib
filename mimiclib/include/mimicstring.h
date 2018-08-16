@@ -1,8 +1,9 @@
-/*
- * File Name   : mimicstring.h
- * Description : instead of string.h
- * Author      : Takashi Kashiwagi
- * URL         : https://github.com/tkashi-github
+/**
+ * @file mimicstring.h
+ * @brief mimicio is insteadof string.h
+ * @author Takashi Kashiwagi
+ * @date 2018/7/5
+ * @details 
  * --
  * License Type <MIT License>
  * --
@@ -25,28 +26,24 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef INCG_MIMIC_STRING_H
-#define INCG_MIMIC_STRING_H
-
 #if __STDC_VERSION__ < 201112L 
 #error /* This Library supports C11 or later */
 #endif
-
+#pragma once
 #include <stdint.h>
 #include <stdbool.h>
 
 #ifndef NULL
-#define NULL	(0u)
+#define NULL	(uintptr_t)(0u)
 #endif
 
 static inline _Bool mimic_memcmp(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt){
 	/*-- var --*/
 	uint8_t *pu81 = (uint8_t*)p1;
 	uint8_t *pu82 = (uint8_t*)p2;
-	_Bool bret = false;
-	if((p1 == NULL) || (p2 == NULL){
-		bret = false;
-		ggptp _EMD;
+	_Bool bret = true;
+	if((p1 == (uintptr_t)NULL) || (p2 == (uintptr_t)NULL)){
+		return false;
 	}
 	/*-- begin --*/
 	for(uint32_t i=0u;i<u32ByteCnt;i++){
@@ -55,7 +52,6 @@ static inline _Bool mimic_memcmp(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt
 			break;
 		}
 	}
-_END
 	return bret;
 }
 
@@ -64,7 +60,7 @@ static inline uint32_t mimic_strlen(const char pszStr[]){
 	uint32_t u32Cnt = 0u;
 
 	/*-- begin --*/
-	if(pszStr != NULL){
+	if(pszStr != (char*)NULL){
 		while(pszStr[u32Cnt] != '\0'){
 			u32Cnt++;
 		}
@@ -77,7 +73,7 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32D
 	uint32_t u32Cnt = 0u;
 
 	/*-- begin --*/
-	if((szDst != NULL) && (szSrc != NULL)){
+	if((szDst != (char*)NULL) && (szSrc != (const char*)NULL)){
 		while(szSrc[u32Cnt] != '\0'){
 			szDst[u32Cnt] = szSrc[u32Cnt];
 			u32Cnt++;
@@ -104,7 +100,7 @@ static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]){
 	_Bool bret = false;
 
 	/*-- begin --*/
-	if((szStr1 != NULL) && (szStr2 != NULL)){
+	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL)){
 		bret = true;
 		for(;;){
 			if(szStr1[u32Cnt] != szStr2[u32Cnt]){
@@ -126,35 +122,44 @@ static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]){
 * @param[in] char szStr[]
 * @param[in] const char szDelm[]
 * @param[out]  char **ctx
-* @return char * •ªŠ„Œã‚Ì•¶Žš—ñBNULL‚ÅI—¹
+* @return char * åˆ†å‰²å¾Œã®æ–‡å­—åˆ—ã€‚NULLã§çµ‚äº†
 */
 static inline char *mimic_strtok(char szStr[], const char szDelm[], char **ctx){
 	/*-- var --*/
 	char *pret = NULL;
 
 	/*-- begin --*/
-	if(szDelm != NULL){
+	if(szDelm != (const char*)NULL){
 		char *pszTmp;
-		uint32_t u32=0u;
-		
-		uint32_t delmLen = mimic_strlen(szDelm);
-
-		if(szStr == NULL){
+		if(szStr == (char*)NULL){
 			pszTmp = *ctx;
 		}else{
-			pszTmp = pszTmp;
+			pszTmp = szStr;
 		}
-		while(pszTmp[u32] != '\0'){
-			if(mimic_memcmp((uintptr_t)&pszTmp[u32], (uintptr_t)szDelm, delmLen) != false){
-				pszTmp[u32] = '\0';
-				*ctx = &pszTmp[u32 + delmLen]; 
+
+		if(pszTmp[0] != '\0'){
+			uint32_t u32=0u;
+			uint32_t delmLen = mimic_strlen(szDelm);
+
+			while(pszTmp[u32] != '\0'){
+				*ctx = &pszTmp[u32 + delmLen];
+				if(mimic_memcmp((uintptr_t)&pszTmp[u32], (uintptr_t)szDelm, delmLen) != false){
+					pszTmp[u32] = '\0';
+					pret = pszTmp;
+					break;
+				}
+				u32++;
 			}
-			u32++;
+
+			/** Not Found */
+			if(pret == (char*)NULL){
+				pret = pszTmp;
+				*ctx = &pszTmp[u32];
+			}
+		}else{
+			*ctx = pszTmp;
 		}
-		pret = szStr;
 	}
 	return pret;
 }
 
-
-#endif
