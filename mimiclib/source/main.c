@@ -27,8 +27,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-#include "mimicstring.h"
-#include "mimicio.h"
+#include "mimiclib.h"
 
 #define TEST_STRING1	"0123456789"
 #define TEST_STRING2	"0123456789\r\n"

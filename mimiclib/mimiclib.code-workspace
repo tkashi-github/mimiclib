@@ -10,6 +10,9 @@
 		"C_Cpp.default.includePath": [
 			"${workspaceFolder}/include",
 			"${workspaceFolder}/source",
+		],
+		"C_Cpp.default.defines": [
+			"WIN_TEST",
 		],		
 	}
 }
