@@ -1,0 +1,6 @@
+build
+CMakeFiles
+data
+mimic_test.exe
+CMakeCache.txt
+cmake_install.cmake
