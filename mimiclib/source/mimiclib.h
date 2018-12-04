@@ -72,11 +72,10 @@ extern "C"
 typedef char TCHAR;
 #endif
 
-
-uint32_t mimic_gets(TCHAR pszStr[], uint32_t u32Size);
-void mimic_printf(const char* fmt, ...);
-_Bool mimic_kbhit(void);
-
+extern uint32_t mimic_gets(TCHAR pszStr[], uint32_t u32Size);
+extern void mimic_printf(const char* fmt, ...);
+extern _Bool mimic_kbhit(void);
+extern void mimic_tcsvprintf(TCHAR szDst[], uint32_t u32MaxElementOfszDst, const TCHAR szFormat[], va_list arg);
 
 /**
  * @brief toupper

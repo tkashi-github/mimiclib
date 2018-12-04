@@ -40,16 +40,7 @@
 #define DefBSP_IMXRT1060_EVK
 #else
 #include <string.h>
-void mimic_printf(const char* fmt, ...){
-	va_list arg;
-	char szBuffer[1024];
 
-	va_start(arg, fmt);
-	vsnprintf(szBuffer, sizeof(szBuffer), fmt, arg);
-	va_end(arg);
-
-	fputs(szBuffer, stdout);
-}
 uint32_t mimic_gets(char pszStr[], uint32_t u32Size){
 	uint32_t ret = 0;
 	if (fgets(pszStr, u32Size, stdin) != NULL) {
@@ -61,7 +52,16 @@ _Bool mimic_kbhit(void){
 	return true; //kbhit();
 }
 #endif
+void mimic_printf(const char* fmt, ...){
+	va_list arg;
+	char szBuffer[1024];
 
+	va_start(arg, fmt);
+	mimic_tcsvprintf(szBuffer, sizeof(szBuffer), fmt, arg);
+	va_end(arg);
+
+	fputs(szBuffer, stdout);
+}
 
 #ifdef DefBSP_IMXRT1060_EVK
 /**
@@ -168,7 +168,8 @@ void mimic_tcsvprintf(
     uint32_t u32Cnt = 0;
     uint32_t u32FlagsUsed;
     uint32_t u32FlagsWidth;
-    uint32_t u32PrecisionWidth;
+    _Bool bValidFlagsWidth;
+	uint32_t u32PrecisionWidth;
     _Bool bValidPrecisionWidth;
     TCHAR vstr[33];
     int32_t vlen = 0;
@@ -206,12 +207,15 @@ void mimic_tcsvprintf(
 				}
 			}
 			u32FlagsWidth = 0;
+			bValidFlagsWidth = false;
 			for(;;){
 				pszStr++;
 				TCHAR ch = *pszStr;
 				if ((ch >= (TCHAR)'0') && (ch <= (TCHAR)'9')){
+					bValidFlagsWidth = true;
 					u32FlagsWidth = (u32FlagsWidth * 10) + (ch - (TCHAR)'0');
 				}else if (ch == (TCHAR)'*'){
+					bValidFlagsWidth = true;
 					u32FlagsWidth = (uint32_t)va_arg(arg, uint32_t);
 				}else{
 					--pszStr;
@@ -294,9 +298,9 @@ void mimic_tcsvprintf(
 						vlen = mimic_tcslen(vstr);
 					}else if ((ch == (TCHAR)'U') || (ch == (TCHAR)'u')){
 						if (u32FlagsUsed & enPrintfFlagsLengthLongLongInt){
-							mimic_ulltoa((uint64_t)va_arg(arg, uint64_t), vstr, sizeof(vstr), 16);							
+							mimic_ulltoa((uint64_t)va_arg(arg, uint64_t), vstr, sizeof(vstr), 10);							
 						}else{
-							mimic_ultoa((uint32_t)va_arg(arg, uint32_t), vstr, sizeof(vstr), 16);
+							mimic_ultoa((uint32_t)va_arg(arg, uint32_t), vstr, sizeof(vstr), 10);
 						}
 						vlen = mimic_tcslen(vstr);
 					}else{
@@ -352,7 +356,10 @@ void mimic_tcsvprintf(
 					TCHAR *psz = (TCHAR *)va_arg(arg, TCHAR *);
 					if (psz != NULL)
 					{
-						if(u32FlagsWidth > 0){
+						if(bValidFlagsWidth == false){
+							mimic_tcscat(&szDst[u32Cnt], u32MaxElementOfszDst - u32Cnt, psz);
+							u32Cnt += mimic_tcslen(psz);
+						}else{
 							vlen = mimic_tcslen(psz);
 							if(vlen > u32FlagsWidth){
 								for(uint32_t i=0;i<u32FlagsWidth;i++){
