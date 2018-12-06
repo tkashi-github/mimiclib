@@ -66,17 +66,17 @@ static void UnitTeset(void){
 		printf("TEST suite :mimic_memcmp\n");
 		printf("TEST CASE 1-1 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"11\", 2) == false\n");
 		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"00", (uintptr_t)"11", 2)? "NG":"OK");
-		printf("TEST CASE 1-2 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"00\", 2) != true\r\n");
+		printf("TEST CASE 1-2 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"00\", 2) == true\r\n");
 		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2)? "OK":"NG");
-		printf("TEST CASE 1-3 : mimic_memcmp((uintptr_t)\"123\", (uintptr_t)\"12\", 3) != true\n");
-		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"123", (uintptr_t)"12", 3)? "OK":"NG");
+		printf("TEST CASE 1-3 : mimic_memcmp((uintptr_t)\"123\", (uintptr_t)\"12\", 3) == flase\n");
+		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"123", (uintptr_t)"12", 3)? "NG":"OK");
 	}
 	{
 		printf("TEST suite :mimic_strlen\n");
 		printf("TEST CASE 2-1 : mimic_strlen(%s) == 10u\n", TEST_STRING1);
 		printf("RESULT        : %s\n", mimic_strlen(TEST_STRING1) == 10u ? "OK":"NG");
-		printf("TEST CASE 2-2 : mimic_strlen(%s) == 12u\n", TEST_STRING2);
-		printf("RESULT        : %s\n", mimic_strlen(TEST_STRING2) == 12u ? "OK":"NG");
+		printf("TEST CASE 2-2 : mimic_strlen(%s) == 11u\n", TEST_STRING2);
+		printf("RESULT        : %s\n", mimic_strlen(TEST_STRING2) == 11u ? "OK":"NG");
 	}
 	{
 		mimic_printf("0 = %s\n", mimic_ltoa(0, szStr, sizeof(szStr)));

@@ -52,6 +52,8 @@ _Bool mimic_kbhit(void){
 	return true; //kbhit();
 }
 #endif
+
+
 void mimic_printf(const char* fmt, ...){
 	va_list arg;
 	char szBuffer[1024];
@@ -60,7 +62,11 @@ void mimic_printf(const char* fmt, ...){
 	mimic_tcsvprintf(szBuffer, sizeof(szBuffer), fmt, arg);
 	va_end(arg);
 
-	fputs(szBuffer, stdout);
+#ifdef DefBSP_IMXRT1060_EVK
+	RTOS_PutString(szBuffer);
+#else
+	fputs(szBuffer, stdin);
+#endif
 }
 
 #ifdef DefBSP_IMXRT1060_EVK
@@ -117,21 +123,6 @@ uint32_t mimic_gets(char pszStr[], uint32_t u32Size){
 	return u32Cnt;
 }
 
-/**
- * @brief printf
- * @param [in]  format
- * @return void
- */
-void mimic_printf(const char *format, ...){
-	va_list arg;
-	char szStr[512];
-
-    va_start(arg, format);
-    vsnprintf(szStr, sizeof(szStr), format, arg);
-    va_end(arg);
-
-	RTOS_PutString(szStr);
-}
 
 /**
  * @brief printf
@@ -248,6 +239,7 @@ void mimic_tcsvprintf(
 			}
 
 			pszStr++;
+			u32FlagsUsed = 0;
 			switch (*pszStr){
 			case (TCHAR)'l':
 				pszStr++;

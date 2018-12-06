@@ -181,7 +181,7 @@ static inline void RTOS_PutChar(TCHAR ch)
  */
 static inline void RTOS_PutString(const TCHAR pszStr[])
 {
-	if (xSemaphoreTake(g_xLPUARTTxSemaphore[kStdioPort], portMAX_DELAY) == pdTRUE)
+	if (xSemaphoreTake(g_bsIdLPUARTTxSemaphore[kStdioPort], portMAX_DELAY) == pdTRUE)
 	{
 		if (pszStr != NULL)
 		{
@@ -205,7 +205,7 @@ static inline void RTOS_PutString(const TCHAR pszStr[])
 				LPUART1->CTRL |= LPUART_CTRL_TIE_MASK;
 			}
 		}
-		xSemaphoreGive(g_xLPUARTTxSemaphore[kStdioPort]);
+		xSemaphoreGive(g_bsIdLPUARTTxSemaphore[kStdioPort]);
 	}
 }
 
@@ -394,49 +394,51 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32D
 * @return true str1 == str2
 * @return false str1 != str2
 */
-static inline _Bool mimic_strcmp(const char szStr1[], const char szStr2[]){
+static inline int32_t mimic_strcmp(const char szStr1[], const char szStr2[]){
 	/*-- var --*/
 	uint32_t u32Cnt = 0u;
-	_Bool bret = false;
 
 	/*-- begin --*/
 	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL)){
-		bret = true;
 		for(;;){
-			if(szStr1[u32Cnt] != szStr2[u32Cnt]){
-				bret = false;
-				break;
+			if(szStr1[u32Cnt] < szStr2[u32Cnt]){
+				return -1;
 			}
-			if(szStr1[u32Cnt] == '\0'){
-				break;
+			if(szStr1[u32Cnt] > szStr2[u32Cnt]){
+				return 1;
+			}
+			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0')){
+				return 0;
 			}
 			u32Cnt++;
 		}
 	}
 
-	return bret;
+	return 0;
 }
-static inline _Bool mimic_tcscmp(const TCHAR szStr1[], const TCHAR szStr2[]){
-	/*-- var --*/
-	uint32_t u32Cnt = 0u;
-	_Bool bret = false;
-
-	/*-- begin --*/
-	if((szStr1 != (const TCHAR*)NULL) && (szStr2 != (const TCHAR*)NULL)){
-		bret = true;
+static inline int32_t mimic_tcsncmp(const TCHAR szStr1[], const TCHAR szStr2[], uint32_t u32NumberOfElements)
+{
+	if((szStr1 != (const TCHAR*)NULL) && (szStr2 != (const TCHAR*)NULL))
+	{
+		uint32_t u32Cnt = 0u;
 		for(;;){
-			if(szStr1[u32Cnt] != szStr2[u32Cnt]){
-				bret = false;
-				break;
+			if(szStr1[u32Cnt] < szStr2[u32Cnt]){
+				return -1;
 			}
-			if(szStr1[u32Cnt] == '\0'){
-				break;
+			if(szStr1[u32Cnt] > szStr2[u32Cnt]){
+				return 1;
+			}
+			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0')){
+				return 0;
 			}
 			u32Cnt++;
+			if(u32Cnt >= u32NumberOfElements){
+				return -1;
+			}
 		}
 	}
 
-	return bret;
+	return -1;
 }
 
 
