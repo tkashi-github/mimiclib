@@ -158,12 +158,12 @@ void mimic_tcsvprintf(
 {
     TCHAR *pszStr = NULL;
     uint32_t u32Cnt = 0;
-    uint32_t u32FlagsUsed;
-    uint32_t u32FlagsWidth;
-    _Bool bValidFlagsWidth;
-	uint32_t u32PrecisionWidth;
-    _Bool bValidPrecisionWidth;
-    TCHAR vstr[33];
+    uint32_t u32FlagsUsed = 0;
+    uint32_t u32FlagsWidth = 0;
+    _Bool bValidFlagsWidth = false;
+	uint32_t u32PrecisionWidth = 0;
+    _Bool bValidPrecisionWidth= false;
+    TCHAR vstr[33] = {0};
     int32_t vlen = 0;
 	/** -- */
 
@@ -240,7 +240,6 @@ void mimic_tcsvprintf(
 			}
 
 			pszStr++;
-			u32FlagsUsed = 0;
 			switch (*pszStr){
 			case (TCHAR)'l':
 				pszStr++;
@@ -310,22 +309,22 @@ void mimic_tcsvprintf(
 							vlen = u32FlagsWidth;
 							vstr[vlen] = (TCHAR)'\0';
 						}else{
-
 							uint32_t u32 = u32FlagsWidth - vlen;
 							TCHAR szTemp[64];
-							uint32_t i;
+							
 							TCHAR tcTemp = (TCHAR)' ';
 							if((u32FlagsUsed & enPrintfFlagsZero) == enPrintfFlagsZero){
 								tcTemp = (TCHAR)'0';
 							}
 							mimic_tcscpy(szTemp, vstr, sizeof(szTemp));
 
+							uint32_t i;
 							for(i=0;i<u32;i++){
 								vstr[i] = tcTemp;
 							}
 							vstr[i] = (TCHAR)'\0';
 
-							mimic_tcscat(vstr, sizeof(szTemp), szTemp);
+							mimic_tcscat(vstr, sizeof(vstr), szTemp);
 							vlen = u32FlagsWidth;
 							vstr[vlen] = (TCHAR)'\0';
 						}
@@ -359,7 +358,7 @@ void mimic_tcsvprintf(
 								}
 							}else{
 								uint32_t u32 = u32FlagsWidth - vlen;
-								if((u32FlagsUsed & enPrintfFlagsMinus) == enPrintfFlagsMinus){
+								if((u32FlagsUsed & enPrintfFlagsMinus) != enPrintfFlagsMinus){
 									/** zero */
 									for(uint32_t i=0;i<vlen;i++){
 										szDst[u32Cnt] = psz[i];
