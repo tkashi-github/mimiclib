@@ -13,6 +13,10 @@
 		],
 		"C_Cpp.default.defines": [
 			"WIN_TEST",
-		],		
+		],
+		"files.associations": {
+			"mimiclib.h": "c"
+		},
+		
 	}
 }

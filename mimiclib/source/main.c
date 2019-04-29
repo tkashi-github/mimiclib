@@ -116,9 +116,14 @@ static void UnitTeset(void){
 		printf("szStr = %s\n", szStr);
 		for(uint32_t i=0u;i<sizeof(s_pszArgTest)/sizeof(char*);i++){
 			printf("arg[%02u] %s\n", i, pszStr);
-			printf("mimic_strcmp  : %s\n", mimic_strcmp(pszStr, s_pszArgTest[i]) ? "OK":"NG");
+			printf("mimic_strcmp  : %s\n", mimic_strcmp(pszStr, s_pszArgTest[i]) ? "NG":"OK");
 			pszStr = mimic_strtok(NULL, " ", &ctx);
 		}
+	}
+	{
+		mimic_printf("kCLOCK_CpuClk                 = %12lu\n", 600000000);
+		mimic_printf("kCLOCK_AhbClk                 = %12lu\n", 600000000);
+		mimic_printf("kCLOCK_SemcClk                = %12lu\n", 166666666);
 	}
 
 }
