@@ -8,6 +8,9 @@
  * Compliant with MISRA-C when possible
  * Learning Standard library for RTOS in C11
  * unusing <stdio.h>, <stdlib.h> and <string.h>
+
+ ## using Libraries
+ * cpputest (https://github.com/cpputest/cpputest) BSD-3-cause
   
 # !!Tab is 4!!
  

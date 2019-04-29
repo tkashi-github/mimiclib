@@ -29,6 +29,7 @@
  */
 #include "mimiclib.h"
 #include <stdio.h>
+
 #define TEST_STRING1	"0123456789"
 #define TEST_STRING2	"0123456789\n"
 #define TEST_STRING3	"cmd 00 11 222 333 444 555 666\n"

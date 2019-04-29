@@ -1,6 +1,7 @@
 build
 CMakeFiles
 data
-mimic_test.exe
+utest.exe
 CMakeCache.txt
 cmake_install.cmake
+.vscode/ipch
