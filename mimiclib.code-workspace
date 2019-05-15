@@ -13,6 +13,7 @@
 		"C_Cpp.default.includePath": [
 			"${workspaceFolder}/include",
 			"${workspaceFolder}/source",
+			"${workspaceFolder}/cpputest/include",
 		],
 		"C_Cpp.default.defines": [
 			"WIN_TEST",

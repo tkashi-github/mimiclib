@@ -8,7 +8,7 @@
  * --
  * License Type <MIT License>
  * --
- * Copyright 2018 Takashi Kashiwagi
+ * Copyright 2018-2019 Takashi Kashiwagi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"), 
@@ -28,32 +28,44 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "mimiclib.h"
-#include <stdio.h>
 
-#define TEST_STRING1	"0123456789"
-#define TEST_STRING2	"0123456789\n"
-#define TEST_STRING3	"cmd 00 11 222 333 444 555 666\n"
+#include "CppUTest/CommandLineTestRunner.h"
 
-static void UnitTeset(void);
 
-static const char *s_pszArgTest[] = {
-	"cmd",
-	"00",
-	"11",
-	"222",
-	"333",
-	"444",
-	"555",
-	"666\n",
-};
+
+#ifdef __cplusplus
+extern "C" {
+#endif  // __cplusplus
+    extern void UnitTeset(void);
+#ifdef __cplusplus
+}
+#endif  // __cplusplus
+
+extern
+
+
 
 
 int main(int argc, char *argv[]){
-	UnitTeset();
-	return 0;
+	//UnitTeset();
+	return CommandLineTestRunner::RunAllTests(argc, argv);
 }
 
-static void UnitTeset(void){
+#if 0
+#define TEST_STRING1	"0123456789"
+#define TEST_STRING2	"0123456789\n"
+#define TEST_STRING3	"cmd 00 11 222 333 444 555 666\n"
+void UnitTeset(void){
+	static const char *s_pszArgTest[8] = {
+		"cmd",
+		"00",
+		"11",
+		"222",
+		"333",
+		"444",
+		"555",
+		"666\n",
+	};
 	mimic_printf("123456\n");
 	mimic_printf("123456 = %d\n", 123456);
 	mimic_printf("123456 = %u\n", 123456);
@@ -127,4 +139,39 @@ static void UnitTeset(void){
 		mimic_printf("kCLOCK_SemcClk                = %12lu\n", 166666666);
 	}
 
+}
+#endif
+
+
+#include <iostream>
+
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
+
+// テストグループを定義
+TEST_GROUP(TestFuncGroup)
+{
+    // 各テストケースの実行直前に呼ばれる仮想メソッド
+    TEST_SETUP()
+    {
+        std::cout << " TEST_SETUP called" << std::endl;
+    }
+
+    // 各テストケースの実行直後に呼ばれる仮想メソッド
+    TEST_TEARDOWN()
+    {
+        std::cout << " TEST_TEARDOWN called" << std::endl;
+    }
+};
+
+// テストを実行するメソッド
+TEST(TestFuncGroup, mimic_memcmp_false)
+{
+    std::cout << "mimic_memcmp : false Test" << std::endl;
+    CHECK_EQUAL(false, mimic_memcmp((uintptr_t)"00", (uintptr_t)"11", 2));
+}
+TEST(TestFuncGroup, mimic_memcmp_true)
+{
+    std::cout << "mimic_memcmp : true Test" << std::endl;
+    CHECK_EQUAL(true, mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2));
 }

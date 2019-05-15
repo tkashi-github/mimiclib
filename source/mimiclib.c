@@ -164,7 +164,7 @@ void mimic_tcsvprintf(
 	uint32_t u32PrecisionWidth = 0;
     _Bool bValidPrecisionWidth= false;
     TCHAR vstr[33] = {0};
-    int32_t vlen = 0;
+    uint32_t vlen = 0;
 	/** -- */
 
 	/** begin */

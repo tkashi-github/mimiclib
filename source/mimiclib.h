@@ -45,7 +45,12 @@ extern "C"
 #include <stdbool.h>
 #include <stdarg.h>
 
-#ifndef WIN_TEST
+#ifdef WIN_TEST
+	#ifdef __cplusplus
+		#include <cstddef>
+		#include <cstdio>
+	#endif
+#else
 #define DefBSP_IMXRT1060_EVK
 #endif
 
@@ -64,8 +69,10 @@ extern "C"
 
 #endif
 
+#ifndef __cplusplus
 #ifndef NULL
 #define NULL (void*)0
+#endif
 #endif
 
 #ifndef TCHAR_TYPE
