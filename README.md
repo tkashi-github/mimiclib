@@ -12,5 +12,13 @@
  ## using Libraries
  * cpputest (https://github.com/cpputest/cpputest) BSD-3-cause
   
+ ## Change log
+ * 2018/07/05: Takashi Kashiwagi: v0.1  
+  first version
+ * 2018/10/28: Takashi Kashiwagi: v0.2 for IMXRT1060-EVK  
+  add RTOS functions for IMXRT.
+ * 2019/05/19: Takashi Kashiwagi: v0.3.1  
+  update headers, unit tests.
+
 # !!Tab is 4!!
  

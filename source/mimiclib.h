@@ -2,13 +2,13 @@
  * @file mimiclib.h
  * @brief mimiclib is insteadof stdio.h, stdlib.h and string.h
  * @author Takashi Kashiwagi
- * @date 2018/7/5
- * @version     0.2
+ * @date 2019/5/19
+ * @version     0.3.1
  * @details 
  * --
  * License Type <MIT License>
  * --
- * Copyright 2018 Takashi Kashiwagi
+ * Copyright 2018 - 2019 Takashi Kashiwagi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"), 
@@ -30,6 +30,7 @@
  * @par Update:
  * - 2018/07/05: Takashi Kashiwagi: v0.1
  * - 2018/10/28: Takashi Kashiwagi: v0.2 for IMXRT1060-EVK
+ * - 2019/05/19: Takashi Kashiwagi: v0.3.1
  */
 #ifndef __cplusplus
 #if __STDC_VERSION__ < 201112L
@@ -67,6 +68,46 @@ extern "C"
 #include "UART/DrvLPUART.h"
 #define kStdioPort enLPUART1
 
+/**
+ * @brief getc (Blocking)
+ * @param [out] ch Received character
+ * @return void
+ */
+static inline void RTOS_GetChar(TCHAR *ch)
+{
+	if (ch != NULL)
+	{
+		DrvUARTRecv(kStdioPort, (uint8_t *)ch, sizeof(TCHAR), portMAX_DELAY);
+	}
+}
+/**
+ * @brief putc (NonBlocking)
+ * @param [in] ch character
+ * @return void
+ */
+static inline void RTOS_PutChar(TCHAR ch)
+{
+	DrvUARTSend(kStdioPort, (const uint8_t *)&ch, sizeof(TCHAR));
+}
+/**
+ * @brief puts (with Semapore)
+ * @param [in] pszStr NULL Terminate String
+ * @return void
+ */
+static inline void RTOS_PutString(const TCHAR pszStr[])
+{
+	uint32_t ByteCnt = mimic_tcslen(pszStr)*sizeof(TCHAR);
+	DrvUARTSend(kStdioPort, (const uint8_t *)pszStr, ByteCnt);
+}
+
+/**
+ * @brief kbhits
+ * @return true There are some characters in Buffer
+ * @return false There are no characters in Buffer
+ */
+static inline _Bool RTOS_kbhit(void){
+	return (_Bool)!DrvUARTIsRxBufferEmpty(kStdioPort);
+}
 #endif
 
 #ifndef __cplusplus
@@ -79,9 +120,18 @@ extern "C"
 typedef char TCHAR;
 #endif
 
+/**
+ * @brief gets
+ * @param [out] szStr NULL Terminate String buffer
+ * @param [out] u32Size buffer elements size
+ * @return elements count
+ */
 extern uint32_t mimic_gets(TCHAR pszStr[], uint32_t u32Size);
+
 extern void mimic_printf(const char* fmt, ...);
+
 extern _Bool mimic_kbhit(void);
+
 extern void mimic_tcsvprintf(TCHAR szDst[], uint32_t u32MaxElementOfszDst, const TCHAR szFormat[], va_list arg);
 
 /**
@@ -147,85 +197,6 @@ static inline uint32_t mimic_tcslen(const TCHAR pszStr[]){
 	return u32Cnt;
 }
 
-#ifdef DefBSP_IMXRT1060_EVK
-/**
- * @brief getc (Blocking)
- * @param [out] ch Received character
- * @return void
- */
-static inline void RTOS_GetChar(TCHAR *ch)
-{
-	if (ch != NULL)
-	{
-		xStreamBufferReceive(g_sbhLPUARTRx[kStdioPort], ch, sizeof(TCHAR), portMAX_DELAY);
-	}
-}
-/**
- * @brief putc (NonBlocking)
- * @param [in] ch character
- * @return void
- */
-static inline void RTOS_PutChar(TCHAR ch)
-{
-
-	if(pdFALSE != xPortIsInsideInterrupt()){
-		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-		if(xStreamBufferSendFromISR(g_sbhLPUARTTx[kStdioPort], &ch, sizeof(TCHAR), &xHigherPriorityTaskWoken) >= 1){
-			LPUART1->CTRL |=LPUART_CTRL_TIE_MASK;
-		}
-		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-	}else{
-		if(xStreamBufferSend(g_sbhLPUARTTx[kStdioPort], &ch, sizeof(TCHAR), 10) >= 1){
-			LPUART1->CTRL |=LPUART_CTRL_TIE_MASK;
-		}
-	}
-}
-/**
- * @brief puts (with Semapore)
- * @param [in] pszStr NULL Terminate String
- * @return void
- */
-static inline void RTOS_PutString(const TCHAR pszStr[])
-{
-	if (xSemaphoreTake(g_bsIdLPUARTTxSemaphore[kStdioPort], portMAX_DELAY) == pdTRUE)
-	{
-		if (pszStr != NULL)
-		{
-			uint32_t ByteCnt = mimic_tcslen(pszStr)*sizeof(TCHAR);
-
-			if(pdFALSE != xPortIsInsideInterrupt()){
-				BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-				if(xStreamBufferSendFromISR(g_sbhLPUARTTx[kStdioPort], pszStr, ByteCnt, &xHigherPriorityTaskWoken) >= ByteCnt){
-					LPUART1->CTRL |=LPUART_CTRL_TIE_MASK;
-				}
-				portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-			}else{
-				if(xStreamBufferSend(g_sbhLPUARTTx[kStdioPort], pszStr, ByteCnt, 10) >= ByteCnt){
-					LPUART1->CTRL |=LPUART_CTRL_TIE_MASK;
-				}
-			}
-			uint32_t ctrl = LPUART1->CTRL;
-			if ((ctrl & LPUART_CTRL_TIE_MASK) != LPUART_CTRL_TIE_MASK)
-			{
-				LPUART1->CTRL |= LPUART_CTRL_TIE_MASK;
-			}
-		}
-		xSemaphoreGive(g_bsIdLPUARTTxSemaphore[kStdioPort]);
-	}
-}
-
-/**
- * @brief kbhits
- * @return true There are some characters in Buffer
- * @return false There are no characters in Buffer
- */
-static inline _Bool RTOS_kbhit(void){
-	return (_Bool)!xStreamBufferIsEmpty(g_sbhLPUARTRx[kStdioPort]);
-}
-
-#endif
 
 /**
  * @brief memcmp

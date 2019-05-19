@@ -1,14 +1,14 @@
 /**
- * @file mimiclib.c
+ * @file mimiclib.h
  * @brief mimiclib is insteadof stdio.h, stdlib.h and string.h
  * @author Takashi Kashiwagi
- * @date 2018/7/5
- * @version     0.2
+ * @date 2019/5/19
+ * @version     0.3.1
  * @details 
  * --
  * License Type <MIT License>
  * --
- * Copyright 2018 Takashi Kashiwagi
+ * Copyright 2018 - 2019 Takashi Kashiwagi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"), 
@@ -30,6 +30,7 @@
  * @par Update:
  * - 2018/07/05: Takashi Kashiwagi: v0.1
  * - 2018/10/28: Takashi Kashiwagi: v0.2 for IMXRT1060-EVK
+ * - 2019/05/19: Takashi Kashiwagi: v0.3.1
  */
 #include "mimiclib.h"
 #include <stdarg.h>
