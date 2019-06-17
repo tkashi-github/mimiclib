@@ -6,7 +6,7 @@
  * @version     0.3.2
  * @details 
  * --
- * License Type <MIT License>
+ * License Type (MIT License)
  * --
  * Copyright 2018 - 2019 Takashi Kashiwagi
  * 

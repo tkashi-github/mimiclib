@@ -6,7 +6,7 @@
  * @version     0.3.2
  * @details 
  * --
- * License Type <MIT License>
+ * License Type (MIT License)
  * --
  * Copyright 2018 - 2019 Takashi Kashiwagi
  * 
@@ -134,10 +134,19 @@ typedef char TCHAR;
  */
 extern uint32_t mimic_gets(TCHAR pszStr[], uint32_t u32Size);
 
+/**
+ * @brief printf
+ */
 extern void mimic_printf(const char* fmt, ...);
 
+/**
+ * @brief kbhit
+ */
 extern _Bool mimic_kbhit(void);
 
+/**
+ * @brief tcsvprintf
+ */
 extern void mimic_tcsvprintf(TCHAR szDst[], uint32_t u32MaxElementOfszDst, const TCHAR szFormat[], va_list arg);
 
 /**
@@ -229,7 +238,7 @@ static inline _Bool mimic_memcmp(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt
 	_Bool bret = true;
 
 	/*-- begin --*/
-	if((p1 != NULL) && (p2 != NULL))
+	if((p1 != (uintptr_t)NULL) && (p2 != (uintptr_t)NULL))
 	{
 		for(uint32_t i=0u;i<u32ByteCnt;i++)
 		{
@@ -257,7 +266,7 @@ static inline _Bool mimic_memcpy(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt
 	_Bool bret = false;
 
 	/*-- begin --*/
-	if((p1 != NULL) && (p2 != NULL))
+	if((p1 != (uintptr_t)NULL) && (p2 != (uintptr_t)NULL))
 	{
 		for(uint32_t i=0u;i<u32ByteCnt;i++)
 		{
@@ -285,7 +294,7 @@ static inline _Bool mimic_memset(uintptr_t p1, uint8_t val, uint32_t u32ByteCnt)
 	_Bool bret = false;
 
 	/*-- begin --*/
-	if(p1 != NULL)
+	if(p1 != (uintptr_t)NULL)
 	{
 		for(uint32_t i=0u;i<u32ByteCnt;i++){
 			pu81[i] = val;
@@ -310,7 +319,7 @@ static inline char *mimic_strtok(char szStr[], const char szDelm[], char **ctx){
 	char *pret = NULL;
 
 	/*-- begin --*/
-	if(szDelm != NULL){
+	if(szDelm != (char *)NULL){
 		char *pszTmp;
 		uint32_t u32=0u;
 		uint32_t delmLen = mimic_strlen(szDelm);
@@ -403,7 +412,7 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], const uint32_
 	/*-- begin --*/
 	if((szDst != (char*)NULL) && (szSrc != (const char*)NULL))
 	{
-		for(i=0;i<DstSize;i++)
+		for(i=0;i<u32DstSize;i++)
 		{
 			szDst[i] = (TCHAR)'\0';
 		}
@@ -412,7 +421,7 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], const uint32_
 		{
 			szDst[i] = szSrc[i];
 			i++;
-			if(i >= DstSize)
+			if(i >= u32DstSize)
 			{
 				break;
 			}
@@ -456,41 +465,48 @@ static inline TCHAR * mimic_tcscpy(TCHAR szDst[], const TCHAR szSrc[], uint32_t 
 	return szDst;
 }
 
+typedef enum{
+	enStr1ltStr2 = -1,
+	enStr1eqStr2 = 0,
+	enStr1gtStr2 = 1,
+	enRangeMax = INT32_MAX,
+	enArgmentError = INT32_MIN,
+}enRetrunCodeStrCmp_t;
 
 /**
  * @brief strcmp
  * @param [in]const char szStr1[]
  * @param [in]const char szStr2[]
- * @return 0 str1 == str2
- * @return > 0 str1 > str2
- * @return < 0 str1 < str2
+ * @return enRetrunCodeStrCmp_t
  */
-static inline int32_t mimic_strcmp(const char szStr1[], const char szStr2[]){
-	/*-- var --*/
-	uint32_t u32Cnt = 0u;
-
-	/*-- begin --*/
+static inline enRetrunCodeStrCmp_t mimic_strcmp(const char szStr1[], const char szStr2[], uint32_t u32NumberOfElements)
+{
 	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL))
 	{
+		uint32_t u32Cnt = 0u;
 		for(;;)
 		{
 			if(szStr1[u32Cnt] < szStr2[u32Cnt])
 			{
-				return -1;
+				return enStr1ltStr2;
 			}
 			if(szStr1[u32Cnt] > szStr2[u32Cnt])
 			{
-				return 1;
+				return enStr1gtStr2;
 			}
 			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0'))
 			{
-				return 0;
+				return enStr1eqStr2;
 			}
 			u32Cnt++;
+			if(u32Cnt >= u32NumberOfElements)
+			{
+				return enRangeMax;
+			}
 		}
 	}
 
-	return 0;
+	return enArgmentError;
 }
 
 /**
@@ -498,11 +514,9 @@ static inline int32_t mimic_strcmp(const char szStr1[], const char szStr2[]){
  * @param [in]const char szStr1[]
  * @param [in]const char szStr2[]
  * @param [in] u32NumberOfElements
- * @return true str1 == str2
- * @return > 0 str1 > str2
- * @return < 0 str1 < str2
+ * @return enRetrunCodeStrCmp_t
  */
-static inline int32_t mimic_tcsncmp(const TCHAR szStr1[], const TCHAR szStr2[], uint32_t u32NumberOfElements)
+static inline enRetrunCodeStrCmp_t mimic_tcsncmp(const TCHAR szStr1[], const TCHAR szStr2[], uint32_t u32NumberOfElements)
 {
 	if((szStr1 != (const TCHAR*)NULL) && (szStr2 != (const TCHAR*)NULL))
 	{
@@ -511,25 +525,25 @@ static inline int32_t mimic_tcsncmp(const TCHAR szStr1[], const TCHAR szStr2[], 
 		{
 			if(szStr1[u32Cnt] < szStr2[u32Cnt])
 			{
-				return -1;
+				return enStr1ltStr2;
 			}
 			if(szStr1[u32Cnt] > szStr2[u32Cnt])
 			{
-				return 1;
+				return enStr1gtStr2;
 			}
 			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0'))
 			{
-				return 0;
+				return enStr1eqStr2;
 			}
 			u32Cnt++;
 			if(u32Cnt >= u32NumberOfElements)
 			{
-				return -1;
+				return enRangeMax;
 			}
 		}
 	}
 
-	return -1;
+	return enArgmentError;
 }
 
 
@@ -565,7 +579,7 @@ static inline TCHAR *mimic_ltoa(const int32_t i32Val, TCHAR szDst[], uint32_t u3
 		u32Index++;
 	}
 
-	/* Reverse*/
+	/* Reverse */
 	for(uint32_t j=0;j<(u32Index/2);j++)
 	{
 		TCHAR tcTemp = szDst[j];

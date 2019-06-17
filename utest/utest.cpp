@@ -51,98 +51,6 @@ int main(int argc, char *argv[]){
 	return CommandLineTestRunner::RunAllTests(argc, argv);
 }
 
-#if 0
-#define TEST_STRING1	"0123456789"
-#define TEST_STRING2	"0123456789\n"
-#define TEST_STRING3	"cmd 00 11 222 333 444 555 666\n"
-void UnitTeset(void){
-	static const char *s_pszArgTest[8] = {
-		"cmd",
-		"00",
-		"11",
-		"222",
-		"333",
-		"444",
-		"555",
-		"666\n",
-	};
-	mimic_printf("123456\n");
-	mimic_printf("123456 = %d\n", 123456);
-	mimic_printf("123456 = %u\n", 123456);
-	mimic_printf("ABCDE = %s\n", "ABCDE");
-	mimic_printf("0x01 = 0x%02X\n", 1);
-	mimic_printf("ABCDE = %10s\n", "ABCDE");
-	mimic_printf("ABCDE = %-10s\n", "ABCDE");
-	// Addo Unit Test Here
-		char szStr[256];
-	{
-		printf("TEST suite :mimic_memcmp\n");
-		printf("TEST CASE 1-1 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"11\", 2) == false\n");
-		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"00", (uintptr_t)"11", 2)? "NG":"OK");
-		printf("TEST CASE 1-2 : mimic_memcmp((uintptr_t)\"00\", (uintptr_t)\"00\", 2) == true\r\n");
-		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2)? "OK":"NG");
-		printf("TEST CASE 1-3 : mimic_memcmp((uintptr_t)\"123\", (uintptr_t)\"12\", 3) == flase\n");
-		printf("RESULT        : %s\n", mimic_memcmp((uintptr_t)"123", (uintptr_t)"12", 3)? "NG":"OK");
-	}
-	{
-		printf("TEST suite :mimic_strlen\n");
-		printf("TEST CASE 2-1 : mimic_strlen(%s) == 10u\n", TEST_STRING1);
-		printf("RESULT        : %s\n", mimic_strlen(TEST_STRING1) == 10u ? "OK":"NG");
-		printf("TEST CASE 2-2 : mimic_strlen(%s) == 11u\n", TEST_STRING2);
-		printf("RESULT        : %s\n", mimic_strlen(TEST_STRING2) == 11u ? "OK":"NG");
-	}
-	{
-		mimic_printf("0 = %s\n", mimic_ltoa(0, szStr, sizeof(szStr)));
-		mimic_printf("%d = %s\n", INT32_MAX, mimic_ltoa(INT32_MAX, szStr, sizeof(szStr)));
-		mimic_printf("%d = %s\n", INT32_MIN, mimic_ltoa(INT32_MIN, szStr, sizeof(szStr)));
-
-		mimic_printf("0 = %s\n", mimic_ultoa(0, szStr, sizeof(szStr), 10));
-		mimic_printf("%lu = %s\n", INT32_MAX, mimic_ultoa(INT32_MAX, szStr, sizeof(szStr), 10));
-		mimic_printf("%lu = %s\n", UINT32_MAX, mimic_ultoa(UINT32_MAX, szStr, sizeof(szStr), 10));
-
-		mimic_printf("0x0 = %s\n", mimic_ultoa(0, szStr, sizeof(szStr), 16));
-		mimic_printf("0x%08lX = %s\n", INT32_MAX, mimic_ultoa(INT32_MAX, szStr, sizeof(szStr), 16));
-		mimic_printf("0x%08lX = %s\n", UINT32_MAX, mimic_ultoa(UINT32_MAX, szStr, sizeof(szStr), 16));
-
-		mimic_printf("0 = %s\n", mimic_lltoa(0, szStr, sizeof(szStr)));
-		mimic_printf("%lld = %s\n", INT64_MAX, mimic_lltoa(INT64_MAX, szStr, sizeof(szStr)));
-		mimic_printf("%lld = %s\n", INT64_MIN, mimic_lltoa(INT64_MIN, szStr, sizeof(szStr)));
-
-		mimic_printf("0 = %s\n", mimic_ulltoa(0, szStr, sizeof(szStr), 10));
-		mimic_printf("%llu = %s\n", INT64_MAX, mimic_ulltoa(INT64_MAX, szStr, sizeof(szStr), 10));
-		mimic_printf("%llu = %s\n", UINT64_MAX, mimic_ulltoa(UINT64_MAX, szStr, sizeof(szStr), 10));
-		mimic_printf("0x%llX = %s\n", INT64_MAX, mimic_ulltoa(INT64_MAX, szStr, sizeof(szStr), 16));
-		mimic_printf("0x%llX = %s\n", UINT64_MAX, mimic_ulltoa(UINT64_MAX, szStr, sizeof(szStr), 16));
-
-		mimic_printf("0.123456 = %s\n", mimic_ftoa(0.123456, szStr, sizeof(szStr), 6));
-		mimic_printf("-0.123456 = %s\n", mimic_ftoa(-0.123456, szStr, sizeof(szStr), 6));
-		mimic_printf("1.23456 = %s\n", mimic_ftoa(1.23456, szStr, sizeof(szStr), 6));
-		mimic_printf("-1.23456 = %s\n", mimic_ftoa(-1.23456, szStr, sizeof(szStr), 6));		
-	}
-	{
-		char *ctx;
-		char *pszStr;
-		
-		mimic_strcpy(szStr, TEST_STRING3, 256);
-
-		pszStr = mimic_strtok(szStr, " ", &ctx);
-		printf("szStr = %s\n", szStr);
-		for(uint32_t i=0u;i<sizeof(s_pszArgTest)/sizeof(char*);i++){
-			printf("arg[%02u] %s\n", i, pszStr);
-			printf("mimic_strcmp  : %s\n", mimic_strcmp(pszStr, s_pszArgTest[i]) ? "NG":"OK");
-			pszStr = mimic_strtok(NULL, " ", &ctx);
-		}
-	}
-	{
-		mimic_printf("kCLOCK_CpuClk                 = %12lu\n", 600000000);
-		mimic_printf("kCLOCK_AhbClk                 = %12lu\n", 600000000);
-		mimic_printf("kCLOCK_SemcClk                = %12lu\n", 166666666);
-	}
-
-}
-#endif
-
-
 #include <iostream>
 
 #include "CppUTest/TestHarness.h"
@@ -174,4 +82,75 @@ TEST(TestFuncGroup, mimic_memcmp_true)
 {
     std::cout << "mimic_memcmp : true Test" << std::endl;
     CHECK_EQUAL(true, mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2));
+}
+
+/* 
+	 = -1,
+	 = 0,
+	 = 1,
+	 = INT32_MAX,
+	enArgmentError = INT32_MIN,
+	*/
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1ltStr2_1)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1ltStr2_1 Test" << std::endl;
+    CHECK_EQUAL(enStr1ltStr2, mimic_strcmp("023", "123", 4));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1ltStr2_2)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1ltStr2_2 Test" << std::endl;
+    CHECK_EQUAL(enStr1ltStr2, mimic_strcmp("1234", "1235", 5));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1eqStr2_1)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1eqStr2_1 Test" << std::endl;
+    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp("1", "1", 2));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1eqStr2_2)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1eqStr2_2 Test" << std::endl;
+    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp("12", "12", 3));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1eqStr2_3)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1eqStr2_3 Test" << std::endl;
+    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp("0123456789", "0123456789", 11));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1gtStr2_1)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1gtStr2_1 Test" << std::endl;
+    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp("2", "1", 2));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1gtStr2_2)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1gtStr2_2 Test" << std::endl;
+    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp("21", "11", 3));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1gtStr2_3)
+{
+    std::cout << "mimic_mimic_strcmp == enStr1gtStr2_3 Test" << std::endl;
+    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp("012345678A", "0123456789", 11));
+}
+
+TEST(TestFuncGroup, mimic_mimic_strcmp_enRangeMax)
+{
+    std::cout << "mimic_mimic_strcmp == enRangeMax Test" << std::endl;
+    CHECK_EQUAL(enRangeMax, mimic_strcmp("0123456789", "0123456789", 10));
+}
+TEST(TestFuncGroup, mimic_mimic_strcmp_enArgmentError_1)
+{
+    std::cout << "mimic_mimic_strcmp == enArgmentError_1 Test" << std::endl;
+    CHECK_EQUAL(enArgmentError, mimic_strcmp(NULL, "0123456789", 10));
+}
+TEST(TestFuncGroup, mimic_mimic_strcmp_enArgmentError_2)
+{
+    std::cout << "mimic_mimic_strcmp == enArgmentError_2 Test" << std::endl;
+    CHECK_EQUAL(enArgmentError, mimic_strcmp("0123456789", NULL, 10));
 }
