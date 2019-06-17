@@ -72,6 +72,8 @@ extern "C"
 #define kStdioPort enLPUART1
 #endif
 
+#define DEF_NEED_DMB
+
 /**
  * @brief getc (Blocking)
  * @param [out] ch Received character
@@ -156,6 +158,11 @@ static inline char *mimic_strupper(char szStr[]){
 	}
 	return szStr;
 }
+/**
+ * @brief tcsupper
+ * @param [in] szStr NULL Terminate String
+ * @return void
+ */
 static inline char *mimic_tcsupper(TCHAR szStr[]){
 	if(szStr != NULL){
 		uint32_t i=0;
@@ -187,6 +194,11 @@ static inline uint32_t mimic_strlen(const char pszStr[]){
 	}
 	return u32Cnt;
 }
+/**
+ * @brief tcslen
+ * @param [in] szStr NULL Terminate String
+ * @return uint32_t Length
+ */
 static inline uint32_t mimic_tcslen(const TCHAR pszStr[]){
 	/*-- var --*/
 	uint32_t u32Cnt = 0u;
@@ -217,43 +229,75 @@ static inline _Bool mimic_memcmp(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt
 	_Bool bret = true;
 
 	/*-- begin --*/
-	for(uint32_t i=0u;i<u32ByteCnt;i++){
-		if(pu81[i] != pu82[i]){
-			bret = false;
-			break;
+	if((p1 != NULL) && (p2 != NULL))
+	{
+		for(uint32_t i=0u;i<u32ByteCnt;i++)
+		{
+			if(pu81[i] != pu82[i]){
+				bret = false;
+				break;
+			}
 		}
 	}
 	return bret;
 }
+
+/**
+ * @brief memcpy
+ * @param [in] p1 Target Pointer1 (!= NULL)
+ * @param [in] p2 src Pointer2 (!= NULL)
+ * @param [in] u32ByteCnt copy Size
+ * @return true OK
+ * @return false NG (argment error)
+ */
 static inline _Bool mimic_memcpy(uintptr_t p1, uintptr_t p2, uint32_t u32ByteCnt){
 	/*-- var --*/
 	uint8_t *pu81 = (uint8_t*)p1;
 	uint8_t *pu82 = (uint8_t*)p2;
-	_Bool bret = true;
+	_Bool bret = false;
 
 	/*-- begin --*/
-	for(uint32_t i=0u;i<u32ByteCnt;i++){
-		pu81[i] = pu82[i];
+	if((p1 != NULL) && (p2 != NULL))
+	{
+		for(uint32_t i=0u;i<u32ByteCnt;i++)
+		{
+			pu81[i] = pu82[i];
+		}
+		bret = true;
 	}
-#ifdef DefBSP_IMXRT1060_EVK
+#ifdef DEF_NEED_DMB
 	__DMB();
 #endif
 	return bret;
 }
+
+/**
+ * @brief memset
+ * @param [in] p1 Target Pointer1 (!= NULL)
+ * @param [in] val
+ * @param [in] u32ByteCnt copy Size
+ * @return true OK
+ * @return false NG (argment error)
+ */
 static inline _Bool mimic_memset(uintptr_t p1, uint8_t val, uint32_t u32ByteCnt){
 	/*-- var --*/
 	uint8_t *pu81 = (uint8_t*)p1;
-	_Bool bret = true;
+	_Bool bret = false;
 
 	/*-- begin --*/
-	for(uint32_t i=0u;i<u32ByteCnt;i++){
-		pu81[i] = val;
+	if(p1 != NULL)
+	{
+		for(uint32_t i=0u;i<u32ByteCnt;i++){
+			pu81[i] = val;
+		}
+		bret = true;
 	}
-#ifdef DefBSP_IMXRT1060_EVK
+#ifdef DEF_NEED_DMB
 	__DMB();
 #endif
 	return bret;
 }
+
 /**
  * @brief strtok_r
  * @param [in] szStr Target String
@@ -291,6 +335,14 @@ static inline char *mimic_strtok(char szStr[], const char szDelm[], char **ctx){
 	}
 	return pret;
 }
+
+/**
+ * @brief tcstok_r
+ * @param [in] szStr Target String
+ * @param [in] szDelm Delemiter
+ * @param [in] ctx 
+ * @return char* 
+ */
 static inline char *mimic_tcstok(TCHAR szStr[], const TCHAR szDelm[], TCHAR **ctx){
 	/*-- var --*/
 	TCHAR *pret = NULL;
@@ -322,44 +374,80 @@ static inline char *mimic_tcstok(TCHAR szStr[], const TCHAR szDelm[], TCHAR **ct
 	return pret;
 }
 
+/**
+ * @brief isprint
+ * @param [in] c 
+ * @return true printable
+ * @return false NG not printable
+ */
 static inline _Bool mimic_isprint(char c){
-	if((c >= 0x20) && (c <= 0x7e)){
+	if(((uint8_t)c >= 0x20u) && ((uint8_t)c <= 0x7eu)){
 		return true;
 	}else{
 		return false;
 	}
 }
 
-
-static inline TCHAR * mimic_tcscpy(TCHAR szDst[], const TCHAR pszSrc[], uint32_t DstSize){
+/**
+ * @brief strncpy
+ * @param [in] szDst (!=NULL)
+ * @param [in] szSrc (!=NULL)
+ * @param [in] u32DstSize 
+ * @return char* 
+ */
+static inline char *mimic_strcpy(char szDst[], const char szSrc[], const uint32_t u32DstSize)
+{
+	/*-- var --*/
 	uint32_t i = 0u;
 
-	for(i=0;i<DstSize;i++){
-		szDst[i] = (TCHAR)'\0';
-	}
-	i = 0u;
-	while(pszSrc[i] != (TCHAR)'\0'){
-		szDst[i] = pszSrc[i];
-		i++;
-		if(i >= DstSize){
-			break;
+	/*-- begin --*/
+	if((szDst != (char*)NULL) && (szSrc != (const char*)NULL))
+	{
+		for(i=0;i<DstSize;i++)
+		{
+			szDst[i] = (TCHAR)'\0';
+		}
+		i = 0u;
+		while(szSrc[i] != (TCHAR)'\0')
+		{
+			szDst[i] = szSrc[i];
+			i++;
+			if(i >= DstSize)
+			{
+				break;
+			}
 		}
 	}
 
 	return szDst;
 }
 
-static inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32DstSize){
+/**
+ * @brief tcsncpy
+ * @param [in] szDst (!=NULL)
+ * @param [in] szSrc (!=NULL)
+ * @param [in] u32DstSize 
+ * @return char* 
+ */
+static inline TCHAR * mimic_tcscpy(TCHAR szDst[], const TCHAR szSrc[], uint32_t DstSize)
+{
 	/*-- var --*/
-	uint32_t u32Cnt = 0u;
+	uint32_t i = 0u;
 
 	/*-- begin --*/
-	if((szDst != (char*)NULL) && (szSrc != (const char*)NULL)){
-		while(szSrc[u32Cnt] != '\0'){
-			szDst[u32Cnt] = szSrc[u32Cnt];
-			u32Cnt++;
-			if(u32Cnt >= u32DstSize){
-				szDst[u32Cnt - 1u] = '\0';
+	if((szDst != (char*)NULL) && (szSrc != (const char*)NULL))
+	{
+		for(i=0;i<DstSize;i++)
+		{
+			szDst[i] = (TCHAR)'\0';
+		}
+		i = 0u;
+		while(szSrc[i] != (TCHAR)'\0')
+		{
+			szDst[i] = szSrc[i];
+			i++;
+			if(i >= DstSize)
+			{
 				break;
 			}
 		}
@@ -370,26 +458,32 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], uint32_t u32D
 
 
 /**
-* @brief strcmp
-* @param[in]const char szStr1[]
-* @param[in]const char szStr2[]
-* @return true str1 == str2
-* @return false str1 != str2
-*/
+ * @brief strcmp
+ * @param [in]const char szStr1[]
+ * @param [in]const char szStr2[]
+ * @return 0 str1 == str2
+ * @return > 0 str1 > str2
+ * @return < 0 str1 < str2
+ */
 static inline int32_t mimic_strcmp(const char szStr1[], const char szStr2[]){
 	/*-- var --*/
 	uint32_t u32Cnt = 0u;
 
 	/*-- begin --*/
-	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL)){
-		for(;;){
-			if(szStr1[u32Cnt] < szStr2[u32Cnt]){
+	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL))
+	{
+		for(;;)
+		{
+			if(szStr1[u32Cnt] < szStr2[u32Cnt])
+			{
 				return -1;
 			}
-			if(szStr1[u32Cnt] > szStr2[u32Cnt]){
+			if(szStr1[u32Cnt] > szStr2[u32Cnt])
+			{
 				return 1;
 			}
-			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0')){
+			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0'))
+			{
 				return 0;
 			}
 			u32Cnt++;
@@ -398,23 +492,38 @@ static inline int32_t mimic_strcmp(const char szStr1[], const char szStr2[]){
 
 	return 0;
 }
+
+/**
+ * @brief tcsncmp
+ * @param [in]const char szStr1[]
+ * @param [in]const char szStr2[]
+ * @param [in] u32NumberOfElements
+ * @return true str1 == str2
+ * @return > 0 str1 > str2
+ * @return < 0 str1 < str2
+ */
 static inline int32_t mimic_tcsncmp(const TCHAR szStr1[], const TCHAR szStr2[], uint32_t u32NumberOfElements)
 {
 	if((szStr1 != (const TCHAR*)NULL) && (szStr2 != (const TCHAR*)NULL))
 	{
 		uint32_t u32Cnt = 0u;
-		for(;;){
-			if(szStr1[u32Cnt] < szStr2[u32Cnt]){
+		for(;;)
+		{
+			if(szStr1[u32Cnt] < szStr2[u32Cnt])
+			{
 				return -1;
 			}
-			if(szStr1[u32Cnt] > szStr2[u32Cnt]){
+			if(szStr1[u32Cnt] > szStr2[u32Cnt])
+			{
 				return 1;
 			}
-			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0')){
+			if((szStr1[u32Cnt] == '\0') && (szStr2[u32Cnt] == '\0'))
+			{
 				return 0;
 			}
 			u32Cnt++;
-			if(u32Cnt >= u32NumberOfElements){
+			if(u32Cnt >= u32NumberOfElements)
+			{
 				return -1;
 			}
 		}
