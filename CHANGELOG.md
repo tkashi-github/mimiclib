@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [0.4.1] - 2019-06-17
+### Fixed
+- CHANGELOG.md
+- compile error
+
 ## [0.4.0] - 2019-06-17
 ### Added
 - doxygen comments.
@@ -24,7 +29,8 @@ update headers, unit tests.
 ### Added
  - first version
 
-[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.0...HEAD
+[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.1...HEAD
+[0.4.1]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.0...release_v0.4.1
 [0.4.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.3.1...release_v0.4.0
 [0.3.1]: https://github.com/tkashi-github/mimiclib/compare/release_v0.2.0...release_v0.3.1
 [0.2.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.1.0...release_v0.2.0
