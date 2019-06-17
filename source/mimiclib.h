@@ -51,6 +51,43 @@ extern "C"
   @{
 */
 
+/**
+ * @brief strlen
+ * @param [in] szStr NULL Terminate String
+ * @return uint32_t Length
+ */
+static inline uint32_t mimic_strlen(const char pszStr[]){
+	/*-- var --*/
+	uint32_t u32Cnt = 0u;
+
+	/*-- begin --*/
+	if(pszStr != NULL){
+		while(pszStr[u32Cnt] != '\0'){
+			u32Cnt++;
+		}
+
+	}
+	return u32Cnt;
+}
+/**
+ * @brief tcslen
+ * @param [in] szStr NULL Terminate String
+ * @return uint32_t Length
+ */
+static inline uint32_t mimic_tcslen(const TCHAR pszStr[]){
+	/*-- var --*/
+	uint32_t u32Cnt = 0u;
+
+	/*-- begin --*/
+	if(pszStr != NULL){
+		while(pszStr[u32Cnt] != '\0'){
+			u32Cnt++;
+		}
+
+	}
+	return u32Cnt;
+}
+
 #ifdef UNIT_TEST
 	#ifdef __cplusplus
 		#include <cstddef>
@@ -186,42 +223,6 @@ static inline char *mimic_tcsupper(TCHAR szStr[]){
 		}
 	}
 	return szStr;
-}
-/**
- * @brief strlen
- * @param [in] szStr NULL Terminate String
- * @return uint32_t Length
- */
-static inline uint32_t mimic_strlen(const char pszStr[]){
-	/*-- var --*/
-	uint32_t u32Cnt = 0u;
-
-	/*-- begin --*/
-	if(pszStr != NULL){
-		while(pszStr[u32Cnt] != '\0'){
-			u32Cnt++;
-		}
-
-	}
-	return u32Cnt;
-}
-/**
- * @brief tcslen
- * @param [in] szStr NULL Terminate String
- * @return uint32_t Length
- */
-static inline uint32_t mimic_tcslen(const TCHAR pszStr[]){
-	/*-- var --*/
-	uint32_t u32Cnt = 0u;
-
-	/*-- begin --*/
-	if(pszStr != NULL){
-		while(pszStr[u32Cnt] != '\0'){
-			u32Cnt++;
-		}
-
-	}
-	return u32Cnt;
 }
 
 
