@@ -84,13 +84,6 @@ TEST(TestFuncGroup, mimic_memcmp_true)
     CHECK_EQUAL(true, mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2));
 }
 
-/* 
-	 = -1,
-	 = 0,
-	 = 1,
-	 = INT32_MAX,
-	enArgmentError = INT32_MIN,
-	*/
 TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1ltStr2_1)
 {
     std::cout << "mimic_mimic_strcmp == enStr1ltStr2_1 Test" << std::endl;
@@ -121,6 +114,7 @@ TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1eqStr2_3)
     CHECK_EQUAL(enStr1eqStr2, mimic_strcmp("0123456789", "0123456789", 11));
 }
 
+
 TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1gtStr2_1)
 {
     std::cout << "mimic_mimic_strcmp == enStr1gtStr2_1 Test" << std::endl;
@@ -136,14 +130,21 @@ TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1gtStr2_2)
 TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1gtStr2_3)
 {
     std::cout << "mimic_mimic_strcmp == enStr1gtStr2_3 Test" << std::endl;
-    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp("012345678A", "0123456789", 11));
+    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp("012345678A", "0123456789", 10));
 }
 
+TEST(TestFuncGroup, mimic_mimic_strcmp_enRangeMax_1)
+{
+    std::cout << "mimic_mimic_strcmp == enRangeMax_1 Test" << std::endl;
+    CHECK_EQUAL(enRangeMax, mimic_strcmp("0", "0", 1));
+}
 TEST(TestFuncGroup, mimic_mimic_strcmp_enRangeMax)
 {
     std::cout << "mimic_mimic_strcmp == enRangeMax Test" << std::endl;
     CHECK_EQUAL(enRangeMax, mimic_strcmp("0123456789", "0123456789", 10));
 }
+
+
 TEST(TestFuncGroup, mimic_mimic_strcmp_enArgmentError_1)
 {
     std::cout << "mimic_mimic_strcmp == enArgmentError_1 Test" << std::endl;

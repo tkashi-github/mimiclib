@@ -3,7 +3,7 @@
  * @brief		mimiclib is insteadof stdio.h, stdlib.h and string.h
  * @author		Takashi Kashiwagi
  * @date		2019/6/17
- * @version     0.3.2
+ * @version     0.4.0
  * @details 
  * --
  * License Type (MIT License)
@@ -31,10 +31,9 @@
  * - 2018/07/05: Takashi Kashiwagi: v0.1
  * - 2018/10/28: Takashi Kashiwagi: v0.2 for IMXRT1060-EVK
  * - 2019/05/19: Takashi Kashiwagi: v0.3.1
- * - 2019/06/17: Takashi Kashiwagi: v0.3.2
+ * - 2019/06/17: Takashi Kashiwagi: v0.4.0
  */
 #include "mimiclib.h"
-#include <stdarg.h>
 
 #ifdef UNIT_TEST
 #include <stdio.h>
@@ -55,12 +54,6 @@ _Bool mimic_kbhit(void)
 	return true; //kbhit();
 }
 #else
-/**
- * @brief gets
- * @param [out] pszStr input buffer
- * @param [in]  u32Size Array size of pszStr
- * @return u32Cnt recieved count
- */
 uint32_t mimic_gets(char pszStr[], uint32_t u32Size)
 {
 	uint32_t u32Cnt = 0u;
@@ -113,11 +106,6 @@ uint32_t mimic_gets(char pszStr[], uint32_t u32Size)
 	return u32Cnt;
 }
 
-/**
- * @brief printf
- * @return true There are some characters in Buffer
- * @return false There are no characters in Buffer
- */
 _Bool mimic_kbhit(void)
 {
 	return RTOS_kbhit();

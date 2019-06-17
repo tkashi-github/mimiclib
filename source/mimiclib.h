@@ -3,7 +3,7 @@
  * @brief		mimiclib is insteadof stdio.h, stdlib.h and string.h
  * @author		Takashi Kashiwagi
  * @date		2019/6/17
- * @version     0.3.2
+ * @version     0.4.0
  * @details 
  * --
  * License Type (MIT License)
@@ -31,7 +31,7 @@
  * - 2018/07/05: Takashi Kashiwagi: v0.1
  * - 2018/10/28: Takashi Kashiwagi: v0.2 for IMXRT1060-EVK
  * - 2019/05/19: Takashi Kashiwagi: v0.3.1
- * - 2019/06/17: Takashi Kashiwagi: v0.3.2
+ * - 2019/06/17: Takashi Kashiwagi: v0.4.0
  */
 #ifndef __cplusplus
 #if __STDC_VERSION__ < 201112L
@@ -141,6 +141,8 @@ extern void mimic_printf(const char* fmt, ...);
 
 /**
  * @brief kbhit
+ * @return true There are some characters in Buffer
+ * @return false There are no characters in Buffer
  */
 extern _Bool mimic_kbhit(void);
 
@@ -399,7 +401,7 @@ static inline _Bool mimic_isprint(char c){
 
 /**
  * @brief strncpy
- * @param [in] szDst (!=NULL)
+ * @param [inout] szDst (!=NULL)
  * @param [in] szSrc (!=NULL)
  * @param [in] u32DstSize 
  * @return char* 
@@ -433,7 +435,7 @@ static inline char *mimic_strcpy(char szDst[], const char szSrc[], const uint32_
 
 /**
  * @brief tcsncpy
- * @param [in] szDst (!=NULL)
+ * @param [inout] szDst (!=NULL)
  * @param [in] szSrc (!=NULL)
  * @param [in] u32DstSize 
  * @return char* 
@@ -475,16 +477,16 @@ typedef enum{
 
 /**
  * @brief strcmp
- * @param [in]const char szStr1[]
- * @param [in]const char szStr2[]
+ * @param [in] szStr1 (!= NULL)
+ * @param [in] szStr2 (!= NULL)
+ * @param [in] u32NumberOfElements (!= 0)
  * @return enRetrunCodeStrCmp_t
  */
 static inline enRetrunCodeStrCmp_t mimic_strcmp(const char szStr1[], const char szStr2[], uint32_t u32NumberOfElements)
 {
-	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL))
+	if((szStr1 != (const char*)NULL) && (szStr2 != (const char*)NULL) && (u32NumberOfElements != 0))
 	{
-		uint32_t u32Cnt = 0u;
-		for(;;)
+		for(uint32_t u32Cnt = 0u; u32Cnt < u32NumberOfElements; u32Cnt++)
 		{
 			if(szStr1[u32Cnt] < szStr2[u32Cnt])
 			{
@@ -498,12 +500,8 @@ static inline enRetrunCodeStrCmp_t mimic_strcmp(const char szStr1[], const char 
 			{
 				return enStr1eqStr2;
 			}
-			u32Cnt++;
-			if(u32Cnt >= u32NumberOfElements)
-			{
-				return enRangeMax;
-			}
 		}
+		return enRangeMax;
 	}
 
 	return enArgmentError;
@@ -511,17 +509,16 @@ static inline enRetrunCodeStrCmp_t mimic_strcmp(const char szStr1[], const char 
 
 /**
  * @brief tcsncmp
- * @param [in]const char szStr1[]
- * @param [in]const char szStr2[]
- * @param [in] u32NumberOfElements
+ * @param [in] szStr1 (!= NULL)
+ * @param [in] szStr2 (!= NULL)
+ * @param [in] u32NumberOfElements (!= 0)
  * @return enRetrunCodeStrCmp_t
  */
 static inline enRetrunCodeStrCmp_t mimic_tcsncmp(const TCHAR szStr1[], const TCHAR szStr2[], uint32_t u32NumberOfElements)
 {
-	if((szStr1 != (const TCHAR*)NULL) && (szStr2 != (const TCHAR*)NULL))
+	if((szStr1 != (const TCHAR*)NULL) && (szStr2 != (const TCHAR*)NULL) && (u32NumberOfElements != 0))
 	{
-		uint32_t u32Cnt = 0u;
-		for(;;)
+		for(uint32_t u32Cnt = 0u; u32Cnt < u32NumberOfElements; u32Cnt++)
 		{
 			if(szStr1[u32Cnt] < szStr2[u32Cnt])
 			{
@@ -535,46 +532,57 @@ static inline enRetrunCodeStrCmp_t mimic_tcsncmp(const TCHAR szStr1[], const TCH
 			{
 				return enStr1eqStr2;
 			}
-			u32Cnt++;
-			if(u32Cnt >= u32NumberOfElements)
-			{
-				return enRangeMax;
-			}
 		}
+		return enRangeMax;
 	}
 
 	return enArgmentError;
 }
 
-
-static inline TCHAR *mimic_ltoa(const int32_t i32Val, TCHAR szDst[], uint32_t u32MaxElementOfszDst){
+/**
+ * @brief ltoa
+ * @param [in] i32Val
+ * @param [inout] szDst != NULL
+ * @param [in] u32NumberOfElements (!= 0)
+ * @return TCHAR * (szDst)
+ */
+static inline TCHAR *mimic_ltoa(const int32_t i32Val, TCHAR szDst[], uint32_t u32MaxElementOfszDst)
+{
 	uint32_t u32Index = 0;
 	int32_t i32Sign;
 	uint32_t u32Val;
 
-	if((szDst == NULL) || (u32MaxElementOfszDst == 0)){
+	if((szDst == NULL) || (u32MaxElementOfszDst == 0))
+	{
 		return NULL;
 	}
+
 	i32Sign = i32Val;
-	if(i32Sign < 0){
+	if(i32Sign < 0)
+	{
 		u32Val = (uint32_t)-i32Val;
-	}else{
+	}
+	else
+	{
 		u32Val = (uint32_t)i32Val;
 	}
 	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR)*u32MaxElementOfszDst);
 
-	while(u32Index < (u32MaxElementOfszDst - 1)){
+	while(u32Index < (u32MaxElementOfszDst - 1))
+	{
 		uint32_t u32 = (u32Val % 10);
 		u32Val /= 10;
 		szDst[u32Index] = (TCHAR)u32 + (TCHAR)'0'; 
 		u32Index++;
-		if(u32Val == 0){
+		if(u32Val == 0)
+		{
 			break;
 		}
 	}
 
 	/* Add sign */
-	if(i32Sign < 0){
+	if(i32Sign < 0)
+	{
 		szDst[u32Index] = (TCHAR)'-';
 		u32Index++;
 	}
@@ -589,26 +597,42 @@ static inline TCHAR *mimic_ltoa(const int32_t i32Val, TCHAR szDst[], uint32_t u3
 	return szDst;
 }
 
-static inline TCHAR *mimic_ultoa(const uint32_t u32Val, TCHAR szDst[], uint32_t u32MaxElementOfszDst, uint32_t u32Radix){
+/**
+ * @brief ultoa
+ * @param [in] u32Val
+ * @param [inout] szDst != NULL
+ * @param [in] u32NumberOfElements (!= 0)
+ * @param [in] u32Radix (!= 0)
+ * @return TCHAR * (szDst)
+ */
+static inline TCHAR *mimic_ultoa(const uint32_t u32Val, TCHAR szDst[], const uint32_t u32MaxElementOfszDst, const uint32_t u32Radix)
+{
 	uint32_t u32Index = 0;
 	uint32_t u32Temp = u32Val;
 
-	if((szDst == NULL) || (u32MaxElementOfszDst == 0)){
+	if((szDst == NULL) || (u32MaxElementOfszDst == 0) || (u32Radix == 0))
+	{
 		return NULL;
 	}
 
 	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR)*u32MaxElementOfszDst);
 
-	while(u32Index < (u32MaxElementOfszDst - 1)){
+	while(u32Index < (u32MaxElementOfszDst - 1))
+	{
 		uint32_t u32 = (u32Temp % u32Radix);
 		u32Temp /= u32Radix;
-		if(u32 <= 9){
+
+		if(u32 <= 9)
+		{
 			szDst[u32Index] = (TCHAR)u32 + (TCHAR)'0';
-		}else{
+		}
+		else
+		{
 			szDst[u32Index] = (TCHAR)(u32 - 10) + (TCHAR)'A';
 		}
 		u32Index++;
-		if(u32Temp == 0){
+		if(u32Temp == 0)
+		{
 			break;
 		}
 	}
@@ -623,34 +647,49 @@ static inline TCHAR *mimic_ultoa(const uint32_t u32Val, TCHAR szDst[], uint32_t 
 	return szDst;
 }
 
-static inline TCHAR *mimic_lltoa(const int64_t i64Val, TCHAR szDst[], uint32_t u32MaxElementOfszDst){
+/**
+ * @brief lltoa
+ * @param [in] i64Val
+ * @param [inout] szDst != NULL
+ * @param [in] u32NumberOfElements (!= 0)
+ * @return TCHAR * (szDst)
+ */
+static inline TCHAR *mimic_lltoa(const int64_t i64Val, TCHAR szDst[], const uint32_t u32MaxElementOfszDst)
+{
 	uint32_t u32Index = 0;
 	int64_t i64Sign;
 	uint64_t u64Val;
 
-	if((szDst == NULL) || (u32MaxElementOfszDst == 0)){
+	if((szDst == NULL) || (u32MaxElementOfszDst == 0))
+	{
 		return NULL;
 	}
 	i64Sign = i64Val;
-	if(i64Sign < 0){
+	if(i64Sign < 0)
+	{
 		u64Val = (uint64_t)-i64Val;
-	}else{
+	}
+	else
+	{
 		u64Val = (uint64_t)i64Val;
 	}
 	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR)*u32MaxElementOfszDst);
 
-	while(u32Index < (u32MaxElementOfszDst - 1)){
+	while(u32Index < (u32MaxElementOfszDst - 1))
+	{
 		uint32_t u32 = (uint32_t)(u64Val % 10ull);
 		u64Val /= 10ull;
 		szDst[u32Index] = (TCHAR)u32 + (TCHAR)'0'; 
 		u32Index++;
-		if(u64Val == 0){
+		if(u64Val == 0)
+		{
 			break;
 		}
 	}
 
 	/* Add sign */
-	if(i64Sign < 0){
+	if(i64Sign < 0)
+	{
 		szDst[u32Index] = (TCHAR)'-';
 		u32Index++;
 	}
@@ -665,27 +704,41 @@ static inline TCHAR *mimic_lltoa(const int64_t i64Val, TCHAR szDst[], uint32_t u
 	return szDst;
 }
 
-
-static inline TCHAR *mimic_ulltoa(const uint64_t u64Val, TCHAR szDst[], uint32_t u32MaxElementOfszDst, uint32_t u32Radix){
+/**
+ * @brief ulltoa
+ * @param [in] u64Val
+ * @param [inout] szDst != NULL
+ * @param [in] u32NumberOfElements (!= 0)
+ * @param [in] u32Radix (!= 0)
+ * @return TCHAR * (szDst)
+ */
+static inline TCHAR *mimic_ulltoa(const uint64_t u64Val, TCHAR szDst[], const uint32_t u32MaxElementOfszDst, const uint32_t u32Radix)
+{
 	uint32_t u32Index = 0;
 	uint64_t u64Temp = u64Val;
 
-	if((szDst == NULL) || (u32MaxElementOfszDst == 0)){
+	if((szDst == NULL) || (u32MaxElementOfszDst == 0) || (u32Radix == 0))
+	{
 		return NULL;
 	}
 
 	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR)*u32MaxElementOfszDst);
 
-	while(u32Index < (u32MaxElementOfszDst - 1)){
+	while(u32Index < (u32MaxElementOfszDst - 1))
+	{
 		uint32_t u32 = (uint32_t)(u64Temp % u32Radix);
 		u64Temp /= u32Radix;
-		if(u32 < 10){
+		if(u32 < 10)
+		{
 			szDst[u32Index] = (TCHAR)u32 + (TCHAR)'0';
-		}else{
+		}
+		else
+		{
 			szDst[u32Index] = (TCHAR)(u32 - 10u) + (TCHAR)'A';
 		}
 		u32Index++;
-		if(u64Temp == 0){
+		if(u64Temp == 0)
+		{
 			break;
 		}
 	}
@@ -700,11 +753,23 @@ static inline TCHAR *mimic_ulltoa(const uint64_t u64Val, TCHAR szDst[], uint32_t
 	return szDst;
 }
 
-
-static inline TCHAR *mimic_tcscat(TCHAR pszStr1[], uint32_t u32MaxElementOfszStr1, const TCHAR pszStr2[]){
+/**
+ * @brief tcscat
+ * @param [inout] pszStr1 (!= NULL)
+ * @param [in] u32MaxElementOfszStr1 (!= 0)
+ * @param [in] pszStr2 (!= NULL)
+ * @return TCHAR * (pszStr1)
+ * @return NULL argment NG
+ */
+static inline TCHAR *mimic_tcscat(TCHAR pszStr1[], uint32_t u32MaxElementOfszStr1, const TCHAR pszStr2[])
+{
 	uint32_t u32Pos = 0;
 	uint32_t u32Index = 0;
 
+	if((pszStr1 == (TCHAR *)NULL) || (u32MaxElementOfszStr1 == 0) || (pszStr2 == 0))
+	{
+		return NULL;
+	}
 	while(pszStr1[u32Pos] != (TCHAR)'\0')
 	{
 		u32Pos++;
@@ -728,33 +793,54 @@ static inline TCHAR *mimic_tcscat(TCHAR pszStr1[], uint32_t u32MaxElementOfszStr
 	return pszStr1;
 }
 
-/** TODO : これは良くない実装 */
-static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], uint32_t u32MaxElementOfszDst, uint32_t precision_width)
+/**
+ * @brief ftoa
+ * TODO : これは良くない実装
+ * @param [in] dfpVal (!= NULL)
+ * @param [inout] szDst (!= NULL)
+ * @param [in] u32MaxElementOfszDst (!= 0)
+ * @param [in] precision_width (!= 0)
+ * @return TCHAR * (pszStr1)
+ * @return NULL argment NG
+ */
+static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32_t u32MaxElementOfszDst, const uint32_t precision_width)
 {
 	double dfpTemp = dfpVal;
 	uint64_t u64Z;
 	uint32_t u32Pos = 0;
 	uint32_t u32PrecCnt = 0;
 
+	if((szDst == (TCHAR *)NULL) || (u32MaxElementOfszDst == 0) || (precision_width == 0))
+	{
+		return NULL;
+	}
 	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR)*u32MaxElementOfszDst);
-	if(dfpVal < 0.0){
+	if(dfpVal < 0.0)
+	{
 		dfpTemp = -dfpVal;
 	}
 
 	u64Z = dfpTemp;
 	dfpTemp -= (double)u64Z;
 
-	if(u64Z != 0){
-		if(dfpVal < 0.0){
+	if(u64Z != 0)
+	{
+		if(dfpVal < 0.0)
+		{
 			szDst[0] = (TCHAR)'-';
 			mimic_ulltoa(u64Z, &szDst[1], u32MaxElementOfszDst-1, 10);
-		}else{
+		}
+		else
+		{
 			mimic_ulltoa(u64Z, szDst, u32MaxElementOfszDst, 10);
 		}
 		
 		u32Pos = mimic_tcslen(szDst);
-	}else{
-		if(dfpVal < 0.0){
+	}
+	else
+	{
+		if(dfpVal < 0.0)
+		{
 			szDst[u32Pos] = (TCHAR)'-';
 			u32Pos++;
 		}
@@ -768,7 +854,8 @@ static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], uint32_t u32
 	for(;;)
 	{
 		dfpTemp *= 10.0;
-		if(u32PrecCnt >= (precision_width - 1)){
+		if(u32PrecCnt >= (precision_width - 1))
+		{
 			dfpTemp += 0.5;
 		}
 		uint32_t u32Z = (uint32_t)dfpTemp;
