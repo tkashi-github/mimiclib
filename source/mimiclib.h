@@ -47,6 +47,17 @@ extern "C"
 #include <stdbool.h>
 #include <stdarg.h>
 
+
+#ifndef __cplusplus
+#ifndef NULL
+#define NULL (void*)0
+#endif
+#endif
+
+#ifndef TCHAR_TYPE
+typedef char TCHAR;
+#endif
+
 /** \defgroup MIMICLIB
   @{
 */
@@ -153,15 +164,6 @@ static inline _Bool RTOS_kbhit(void){
 }
 #endif
 
-#ifndef __cplusplus
-#ifndef NULL
-#define NULL (void*)0
-#endif
-#endif
-
-#ifndef TCHAR_TYPE
-typedef char TCHAR;
-#endif
 
 /**
  * @brief gets
