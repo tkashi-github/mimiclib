@@ -27,5 +27,5 @@ update headers, unit tests.
 [Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.0...HEAD
 [0.4.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.3.1...release_v0.4.0
 [0.3.1]: https://github.com/tkashi-github/mimiclib/compare/release_v0.2.0...release_v0.3.1
-[0.2.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.1.0...release_v0.1.0
-[0.1.0]: https://github.com/tkashi-github/mimiclib/blob/release_v0.1.0/
+[0.2.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.1.0...release_v0.2.0
+[0.1.0]: https://github.com/tkashi-github/mimiclib/tree/release_v0.1.0
