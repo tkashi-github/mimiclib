@@ -16,7 +16,7 @@
 			"${workspaceFolder}/cpputest/include",
 		],
 		"C_Cpp.default.defines": [
-			"WIN_TEST",
+			"UNIT_TEST",
 		],
 		"files.associations": {
 			"mimiclib.h": "c"

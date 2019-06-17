@@ -1,9 +1,9 @@
 /**
- * @file mimiclib.h
- * @brief mimiclib is insteadof stdio.h, stdlib.h and string.h
- * @author Takashi Kashiwagi
- * @date 2019/5/19
- * @version     0.3.1
+ * @file		mimiclib.h
+ * @brief		mimiclib is insteadof stdio.h, stdlib.h and string.h
+ * @author		Takashi Kashiwagi
+ * @date		2019/6/17
+ * @version     0.3.2
  * @details 
  * --
  * License Type <MIT License>
@@ -31,10 +31,11 @@
  * - 2018/07/05: Takashi Kashiwagi: v0.1
  * - 2018/10/28: Takashi Kashiwagi: v0.2 for IMXRT1060-EVK
  * - 2019/05/19: Takashi Kashiwagi: v0.3.1
+ * - 2019/06/17: Takashi Kashiwagi: v0.3.2
  */
 #ifndef __cplusplus
 #if __STDC_VERSION__ < 201112L
-#error /** Only C11 */
+#error
 #endif
 #endif
 #pragma once
@@ -46,16 +47,16 @@ extern "C"
 #include <stdbool.h>
 #include <stdarg.h>
 
-#ifdef WIN_TEST
+/** \defgroup MIMICLIB
+  @{
+*/
+
+#ifdef UNIT_TEST
 	#ifdef __cplusplus
 		#include <cstddef>
 		#include <cstdio>
 	#endif
 #else
-#define DefBSP_IMXRT1060_EVK
-#endif
-
-#ifdef DefBSP_IMXRT1060_EVK
 /** OS */
 #include "FreeRTOS.h"
 #include "event_groups.h"
@@ -64,9 +65,12 @@ extern "C"
 #include "OSResource.h"
 
 /** Board */
-#include "MIMXRT1062.h"
 #include "UART/DrvLPUART.h"
+
+#ifndef kStdioPort
+#warning "Please set kStdioPort!!"
 #define kStdioPort enLPUART1
+#endif
 
 /**
  * @brief getc (Blocking)
@@ -446,13 +450,13 @@ static inline TCHAR *mimic_ltoa(const int32_t i32Val, TCHAR szDst[], uint32_t u3
 		}
 	}
 
-	/** Add sign */
+	/* Add sign */
 	if(i32Sign < 0){
 		szDst[u32Index] = (TCHAR)'-';
 		u32Index++;
 	}
 
-	/** Reverse*/
+	/* Reverse*/
 	for(uint32_t j=0;j<(u32Index/2);j++)
 	{
 		TCHAR tcTemp = szDst[j];
@@ -486,7 +490,7 @@ static inline TCHAR *mimic_ultoa(const uint32_t u32Val, TCHAR szDst[], uint32_t 
 		}
 	}
 
-	/** Reverse*/
+	/* Reverse*/
 	for(uint32_t j=0;j<(u32Index/2);j++)
 	{
 		TCHAR tcTemp = szDst[j];
@@ -522,13 +526,13 @@ static inline TCHAR *mimic_lltoa(const int64_t i64Val, TCHAR szDst[], uint32_t u
 		}
 	}
 
-	/** Add sign */
+	/* Add sign */
 	if(i64Sign < 0){
 		szDst[u32Index] = (TCHAR)'-';
 		u32Index++;
 	}
 
-	/** Reverse*/
+	/* Reverse*/
 	for(uint32_t j=0;j<(u32Index/2);j++)
 	{
 		TCHAR tcTemp = szDst[j];
@@ -563,7 +567,7 @@ static inline TCHAR *mimic_ulltoa(const uint64_t u64Val, TCHAR szDst[], uint32_t
 		}
 	}
 
-	/** Reverse*/
+	/* Reverse*/
 	for(uint32_t j=0;j<(u32Index/2);j++)
 	{
 		TCHAR tcTemp = szDst[j];
@@ -659,6 +663,9 @@ static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], uint32_t u32
 
 	return szDst;
 }
+
+
+/*@} end of group MIMICLIB */
 
 #ifdef __cplusplus
 }

@@ -6,8 +6,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWIN_TEST -I../source -I../cpputest/include -Wall -Wextra -Wno-long-long -pedantic -L../cpputest/lib")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWIN_TEST -I../source -I../cpputest/include -Wall -Wextra -Wno-long-long -pedantic -L../cpputest/lib")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUNIT_TEST -I../source -I../cpputest/include -Wall -Wextra -Wno-long-long -pedantic -L../cpputest/lib")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUNIT_TEST -I../source -I../cpputest/include -Wall -Wextra -Wno-long-long -pedantic -L../cpputest/lib")
 
 add_executable(utest
   ./utest/utest.cpp
