@@ -47,6 +47,12 @@ extern "C"
 #include <stdbool.h>
 #include <stdarg.h>
 
+#ifdef UNIT_TEST
+	#ifdef __cplusplus
+		#include <cstddef>
+		#include <cstdio>
+	#endif
+#endif
 
 #ifndef __cplusplus
 #ifndef NULL
@@ -99,12 +105,7 @@ static inline uint32_t mimic_tcslen(const TCHAR pszStr[]){
 	return u32Cnt;
 }
 
-#ifdef UNIT_TEST
-	#ifdef __cplusplus
-		#include <cstddef>
-		#include <cstdio>
-	#endif
-#else
+#ifndef UNIT_TEST
 /** OS */
 #include "FreeRTOS.h"
 #include "event_groups.h"
