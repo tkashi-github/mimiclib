@@ -55,6 +55,7 @@ extern "C"
 #endif
 
 #ifndef TCHAR_TYPE
+#define TCHAR_TYPE
 typedef char TCHAR;
 #endif
 
@@ -72,7 +73,7 @@ static inline uint32_t mimic_strlen(const char pszStr[]){
 	uint32_t u32Cnt = 0u;
 
 	/*-- begin --*/
-	if(pszStr != NULL){
+	if(pszStr != (const char *)NULL){
 		while(pszStr[u32Cnt] != '\0'){
 			u32Cnt++;
 		}
@@ -90,7 +91,7 @@ static inline uint32_t mimic_tcslen(const TCHAR pszStr[]){
 	uint32_t u32Cnt = 0u;
 
 	/*-- begin --*/
-	if(pszStr != NULL){
+	if(pszStr != (const char *)NULL){
 		while(pszStr[u32Cnt] != '\0'){
 			u32Cnt++;
 		}
