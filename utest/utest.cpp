@@ -155,3 +155,36 @@ TEST(TestFuncGroup, mimic_mimic_strcmp_enArgmentError_2)
     std::cout << "mimic_mimic_strcmp == enArgmentError_2 Test" << std::endl;
     CHECK_EQUAL(enArgmentError, mimic_strcmp("0123456789", NULL, 10));
 }
+
+TEST(TestFuncGroup, mimic_tcslen_0)
+{
+    std::cout << "mimic_tcslen("") == 0 Test" << std::endl;
+    CHECK_EQUAL(0, mimic_tcslen(""));
+}
+TEST(TestFuncGroup, mimic_tcslen_1)
+{
+    std::cout << "mimic_tcslen("") == 1 Test" << std::endl;
+    CHECK_EQUAL(1, mimic_tcslen("1"));
+}
+TEST(TestFuncGroup, mimic_tcslen_10)
+{
+    std::cout << "mimic_tcslen("") == 10 Test" << std::endl;
+    CHECK_EQUAL(10, mimic_tcslen("0123456789"));
+}
+
+TEST(TestFuncGroup, mimic_sprintf_HelloWorld_OK)
+{
+    char szStr[512];
+
+    std::cout << "mimic_sprintf == \"Hello World\" OKTest" << std::endl;
+    mimic_sprintf(szStr, sizeof(szStr), "Hello World");
+    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "Hello World", sizeof(szStr)));
+}
+TEST(TestFuncGroup, mimic_sprintf_HelloWorld_NG)
+{
+    char szStr[512];
+
+    std::cout << "mimic_sprintf != \"Hello World\" NG Test" << std::endl;
+    mimic_sprintf(szStr, sizeof(szStr), "hello World");
+    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp(szStr, "Hello World", sizeof(szStr)));
+}

@@ -122,13 +122,21 @@ _Bool mimic_kbhit(void)
 void mimic_printf(const char *fmt, ...)
 {
 	va_list arg;
-	char szBuffer[1024];
+	char szBuffer[512];
 
 	va_start(arg, fmt);
 	mimic_tcsvprintf(szBuffer, sizeof(szBuffer), fmt, arg);
 	va_end(arg);
 
 	MIMICLIB_PutString(szBuffer);
+}
+void mimic_sprintf(TCHAR pszStr[], uint32_t u32MaxElementOfszDst, const char* fmt, ...)
+{
+	va_list arg;
+
+	va_start(arg, fmt);
+	mimic_tcsvprintf(pszStr, sizeof(u32MaxElementOfszDst), fmt, arg);
+	va_end(arg);
 }
 
 /**

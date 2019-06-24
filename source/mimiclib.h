@@ -159,6 +159,14 @@ extern uint32_t mimic_gets(TCHAR pszStr[], uint32_t u32Size);
 extern void mimic_printf(const char* fmt, ...);
 
 /**
+ * @brief sprintf
+ * @param [out] pszStr NULL Terminate String buffer (!= NULL)
+ * @param [in] fmt format string
+ * @param [in] ... variable list
+ */
+extern void mimic_sprintf(TCHAR pszStr[], uint32_t u32MaxElementOfszDst, const char* fmt, ...);
+
+/**
  * @brief kbhit
  * @return true There are some characters in Buffer
  * @return false There are no characters in Buffer
