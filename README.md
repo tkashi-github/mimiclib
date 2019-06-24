@@ -9,6 +9,16 @@
  * Learning Standard library for RTOS in C11
  * unusing <stdio.h>, <stdlib.h> and <string.h>
 
+## Porting
+Please implements following 4 functions.
+
+```
+void MIMICLIB_GetChar(TCHAR *ch);
+void MIMICLIB_PutChar(TCHAR ch);
+void MIMICLIB_PutString(const TCHAR pszStr[]);
+_Bool MIMICLIB_kbhit(void);
+```
+
  ## using Libraries
  * cpputest (https://github.com/cpputest/cpputest) BSD-3-cause
   
