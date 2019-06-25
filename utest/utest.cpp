@@ -188,3 +188,23 @@ TEST(TestFuncGroup, mimic_sprintf_HelloWorld_NG)
     mimic_sprintf(szStr, sizeof(szStr), "hello World");
     CHECK_EQUAL(enStr1gtStr2, mimic_strcmp(szStr, "Hello World", sizeof(szStr)));
 }
+TEST(TestFuncGroup, mimic_sprintf_Float)
+{
+    char szStr[512];
+
+    std::cout << "mimic_sprintf == \"1.23456\" OKTest" << std::endl;
+    mimic_sprintf(szStr, sizeof(szStr), "%f", 1.23456);
+
+    std::cout << szStr << std::endl;
+    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "1.23456", sizeof(szStr)));
+}
+TEST(TestFuncGroup, mimic_ftoa_1_2)
+{
+    char szStr[512];
+
+    std::cout << "mimic_ftoa == \"1.2\" OKTest" << std::endl;
+    mimic_ftoa(1.2, szStr, sizeof(szStr), 1);
+
+    std::cout << szStr << std::endl;
+    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "1.2", sizeof(szStr)));
+}
