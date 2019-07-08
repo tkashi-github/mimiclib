@@ -208,3 +208,11 @@ TEST(TestFuncGroup, mimic_ftoa_1_2)
     std::cout << szStr << std::endl;
     CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "1.2", sizeof(szStr)));
 }
+TEST(TestFuncGroup, mimic_atof_OK)
+{
+    char szStr[512];
+
+    std::cout << "mimic_atof(\"12.34\", 5) == \"12.34\" OKTest" << std::endl;
+
+    CHECK_EQUAL(12.34, mimic_atof("12.34", 5));
+}

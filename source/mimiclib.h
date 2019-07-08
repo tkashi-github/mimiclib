@@ -49,9 +49,11 @@ extern "C"
 #include <stdarg.h>
 
 #ifdef UNIT_TEST
+	#include <stdio.h>
 	#ifdef __cplusplus
 		#include <cstddef>
 		#include <cstdio>
+		
 	#endif
 #endif
 
@@ -866,6 +868,56 @@ static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32
 	return szDst;
 }
 
+static inline double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
+{	
+	double dfp = 0.0;
+	double dfp2 = 0.0;
+	uint32_t i=0;
+	int32_t sign = 1;
+	_Bool bZ = true;
+
+	printf("[%s (%d)] szStr = %s\r\n",__func__, __LINE__, szStr);
+
+	while(szStr[i] == ' ')
+	{
+		i++;
+		if(i > u32BufSize)
+		{
+			return 0;
+		}
+	}
+
+	if(szStr[i] == '-')
+	{
+		i++;
+		sign = -1;
+	}
+
+
+
+	while(szStr[i] != '\0')
+	{
+		if((szStr[i] >= '0') && (szStr[i] <='9'))
+		{
+			uint32_t tmp = (uint32_t)(szStr[i] - '0');
+			dfp *= 10;
+			dfp += tmp;
+			printf("[%s (%d)] dfp = %f\r\n",__func__, __LINE__, dfp);
+		}
+		else if (szStr[i] == '.')
+		{
+			break;
+		}
+		else
+		{
+			/* NOP */
+		}
+		i++;
+	}
+
+	// TODO後ろ
+	return sign*(dfp + dfp2);
+}
 
 /*@} end of group MIMICLIB */
 
