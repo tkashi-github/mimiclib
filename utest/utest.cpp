@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
 }
 
 #include <iostream>
-
+#include <string.h>
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
 
@@ -178,25 +178,27 @@ TEST(TestFuncGroup, mimic_sprintf_HelloWorld_OK)
 
     std::cout << "mimic_sprintf == \"Hello World\" OKTest" << std::endl;
     mimic_sprintf(szStr, sizeof(szStr), "Hello World");
-    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "Hello World", sizeof(szStr)));
+    STRNCMP_EQUAL("Hello World", szStr, strlen("Hello World"));
 }
 TEST(TestFuncGroup, mimic_sprintf_HelloWorld_NG)
 {
     char szStr[512];
 
+    memset(szStr, 0, sizeof(szStr));
     std::cout << "mimic_sprintf != \"Hello World\" NG Test" << std::endl;
     mimic_sprintf(szStr, sizeof(szStr), "hello World");
-    CHECK_EQUAL(enStr1gtStr2, mimic_strcmp(szStr, "Hello World", sizeof(szStr)));
+    STRCMP_NOCASE_EQUAL("Hello World", szStr);
 }
 TEST(TestFuncGroup, mimic_sprintf_Float)
 {
     char szStr[512];
 
+    memset(szStr, 0, sizeof(szStr));
     std::cout << "mimic_sprintf == \"1.23456\" OKTest" << std::endl;
-    mimic_sprintf(szStr, sizeof(szStr), "%f", 1.23456);
+    mimic_sprintf(szStr, sizeof(szStr), "%d %d %u %.5f", INT32_MIN, INT32_MAX, UINT32_MAX, 1.23456);
 
     std::cout << szStr << std::endl;
-    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "1.23456", sizeof(szStr)));
+    STRCMP_EQUAL("-2147483648 2147483647 4294967295 1.23456", szStr);
 }
 TEST(TestFuncGroup, mimic_ftoa_1_2)
 {
@@ -205,14 +207,17 @@ TEST(TestFuncGroup, mimic_ftoa_1_2)
     std::cout << "mimic_ftoa == \"1.2\" OKTest" << std::endl;
     mimic_ftoa(1.2, szStr, sizeof(szStr), 1);
 
-    std::cout << szStr << std::endl;
-    CHECK_EQUAL(enStr1eqStr2, mimic_strcmp(szStr, "1.2", sizeof(szStr)));
+    STRNCMP_EQUAL("1.2", szStr, 3);
 }
-TEST(TestFuncGroup, mimic_atof_OK)
+TEST(TestFuncGroup, mimic_atof_OK_12_3456789)
 {
-    char szStr[512];
+    std::cout << "mimic_atof(\"12.3456789\", 10) == \"12.3456789\" OKTest" << std::endl;
 
-    std::cout << "mimic_atof(\"12.34\", 5) == \"12.34\" OKTest" << std::endl;
+    DOUBLES_EQUAL(12.3456789, mimic_atof("12.3456789", 10), 0.0000001);
+}
+TEST(TestFuncGroup, mimic_atof_OK2)
+{
+    std::cout << "mimic_atof(\"100.000000\", 10) == \"100.000000\" OKTest" << std::endl;
 
-    CHECK_EQUAL(12.34, mimic_atof("12.34", 5));
+    DOUBLES_EQUAL(100.000000, mimic_atof("100.000000", 10), 0.0000001);
 }

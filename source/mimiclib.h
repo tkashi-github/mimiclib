@@ -808,6 +808,7 @@ static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32
 	{
 		return NULL;
 	}
+
 	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR)*u32MaxElementOfszDst);
 	if(dfpVal < 0.0)
 	{
@@ -870,20 +871,16 @@ static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32
 
 static inline double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
 {	
-	double dfp = 0.0;
-	double dfp2 = 0.0;
+	volatile double dfp = 0.0;
 	uint32_t i=0;
 	int32_t sign = 1;
-	_Bool bZ = true;
-
-	printf("[%s (%d)] szStr = %s\r\n",__func__, __LINE__, szStr);
 
 	while(szStr[i] == ' ')
 	{
 		i++;
-		if(i > u32BufSize)
+		if(i >= u32BufSize)
 		{
-			return 0;
+			return 0.0;
 		}
 	}
 
@@ -893,19 +890,17 @@ static inline double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
 		sign = -1;
 	}
 
-
-
-	while(szStr[i] != '\0')
+	while((szStr[i] != '\0') && (i < u32BufSize))
 	{
 		if((szStr[i] >= '0') && (szStr[i] <='9'))
 		{
 			uint32_t tmp = (uint32_t)(szStr[i] - '0');
 			dfp *= 10;
 			dfp += tmp;
-			printf("[%s (%d)] dfp = %f\r\n",__func__, __LINE__, dfp);
 		}
 		else if (szStr[i] == '.')
 		{
+			i++;
 			break;
 		}
 		else
@@ -915,8 +910,26 @@ static inline double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
 		i++;
 	}
 
-	// TODO後ろ
-	return sign*(dfp + dfp2);
+	{
+		uint32_t u32DecimalPoint = 1u;
+		volatile double dfp2 = 0.0;
+		while((szStr[i] != '\0') && (i < u32BufSize))
+		{
+			if((szStr[i] >= '0') && (szStr[i] <='9'))
+			{
+				uint32_t tmp = (uint32_t)(szStr[i] - '0');
+				u32DecimalPoint *= 10;
+				dfp2 += (double)tmp / (double)u32DecimalPoint;
+			}
+			else
+			{
+				break;
+			}
+			i++;
+		}
+		dfp += dfp2;
+	}
+	return sign*(dfp);
 }
 
 /*@} end of group MIMICLIB */

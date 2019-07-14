@@ -135,7 +135,7 @@ void mimic_sprintf(TCHAR pszStr[], uint32_t u32MaxElementOfszDst, const char* fm
 	va_list arg;
 
 	va_start(arg, fmt);
-	mimic_tcsvprintf(pszStr, sizeof(u32MaxElementOfszDst), fmt, arg);
+	mimic_tcsvprintf(pszStr, u32MaxElementOfszDst, fmt, arg);
 	va_end(arg);
 }
 
