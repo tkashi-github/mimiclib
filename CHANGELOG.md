@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - add test code
 
+## [0.5.0] - 2019-07-14
+### add
+- mimic_atof
+- mimic_strtol
+- mimic_strtoll
+- mimic_strtoul
+- mimic_strtoull
+
 ## [0.4.2] - 2019-06-17
 ### Fixed
 - compile error
@@ -35,7 +43,8 @@ update headers, unit tests.
 ### Added
  - first version
 
-[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.2...HEAD
+[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.5.0...HEAD
+[0.4.2]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.2...release_v0.5.0
 [0.4.2]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.1...release_v0.4.2
 [0.4.1]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.0...release_v0.4.1
 [0.4.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.3.1...release_v0.4.0

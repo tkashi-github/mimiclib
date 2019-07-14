@@ -869,11 +869,22 @@ static inline TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32
 	return szDst;
 }
 
+/**
+ * @brief atof
+ * @param [in] szStr (!= NULL)
+ * @param [in] u32BufSize sizeof(szStr) (!= 0)
+ * @return double
+ */
 static inline double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
 {	
 	volatile double dfp = 0.0;
 	uint32_t i=0;
 	int32_t sign = 1;
+
+	if((szStr == NULL) || (u32BufSize == 0u))
+	{
+		return 0.0;
+	}
 
 	while(szStr[i] == ' ')
 	{
@@ -932,6 +943,228 @@ static inline double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
 	return sign*(dfp);
 }
 
+/**
+ * @brief strtol
+ * @param [in] szStr (!= NULL)
+ * @param [in] u32BufSize sizeof(szStr) (!= 0)
+ * @return int32_t
+ */
+static inline int32_t mimic_strtol(const TCHAR szStr[], const uint32_t u32BufSize)
+{
+	int32_t iret = 0;
+	uint32_t u32Val = 0;
+	uint32_t i=0;
+	int32_t sign = 1;
+
+	if((szStr == NULL) || (u32BufSize == 0u))
+	{
+		return 0;
+	}
+
+	while(szStr[i] == ' ')
+	{
+		i++;
+		if(i >= u32BufSize)
+		{
+			return 0;
+		}
+	}
+
+	if(szStr[i] == '-')
+	{
+		i++;
+		sign = -1;
+	}
+
+	while((szStr[i] != '\0') && (i < u32BufSize))
+	{
+		if((szStr[i] >= '0') && (szStr[i] <='9'))
+		{
+			uint32_t tmp = (uint32_t)(szStr[i] - '0');
+			u32Val *= 10;
+			u32Val += tmp;
+		}
+		else
+		{
+			/* NOP */
+		}
+		i++;
+	}
+
+	if(u32Val >= INT32_MAX)
+	{
+		iret = INT32_MAX;
+	}
+
+	iret = (int32_t)u32Val;
+	return sign * iret;
+}
+
+/**
+ * @brief strtol
+ * @param [in] szStr (!= NULL)
+ * @param [in] u32BufSize sizeof(szStr) (!= 0)
+ * @return int64_t
+ */
+static inline int64_t mimic_strtoll(const TCHAR szStr[], const uint32_t u32BufSize)
+{
+	int64_t iret = 0;
+	uint64_t u64Val = 0;
+	uint32_t i=0;
+	int32_t sign = 1;
+
+	if((szStr == NULL) || (u32BufSize == 0u))
+	{
+		return 0;
+	}
+
+	while(szStr[i] == ' ')
+	{
+		i++;
+		if(i >= u32BufSize)
+		{
+			return 0;
+		}
+	}
+
+	if(szStr[i] == '-')
+	{
+		i++;
+		sign = -1;
+	}
+
+	while((szStr[i] != '\0') && (i < u32BufSize))
+	{
+		if((szStr[i] >= '0') && (szStr[i] <='9'))
+		{
+			uint64_t tmp = (uint64_t)(szStr[i] - '0');
+			u64Val *= 10;
+			u64Val += tmp;
+		}
+		else
+		{
+			/* NOP */
+		}
+		i++;
+	}
+
+	if(u64Val >= INT64_MAX)
+	{
+		iret = INT64_MAX;
+	}
+
+	iret = (int64_t)u64Val;
+	return sign * iret;
+}
+
+/**
+ * @brief strtoul
+ * @param [in] szStr (!= NULL)
+ * @param [in] u32Base (10 or 16)
+ * @param [in] u32BufSize sizeof(szStr) (!= 0)
+ * @return uint32_t
+ */
+static inline uint32_t mimic_strtoul(const TCHAR szStr[], const uint32_t u32BufSize, const uint32_t u32Base)
+{
+	uint32_t u32Val = 0;
+	uint32_t i=0;
+	if((szStr == NULL) || (u32BufSize == 0u) || ((u32Base != 10u) && (u32Base != 16u)))
+	{
+		return 0;
+	}
+	while(szStr[i] == ' ')
+	{
+		i++;
+		if(i >= u32BufSize)
+		{
+			return 0;
+		}
+	}
+
+	while((szStr[i] != '\0') && (i < u32BufSize))
+	{
+		if((szStr[i] >= '0') && (szStr[i] <='9'))
+		{
+			uint32_t tmp = (uint32_t)(szStr[i] - '0');
+			u32Val *= u32Base;
+			u32Val += tmp;
+		}
+		else if((szStr[i] >= 'a') && (szStr[i] <='f'))
+		{
+			uint32_t tmp = (uint32_t)(szStr[i] - 'a') + 10u;
+			u32Val *= u32Base;
+			u32Val += tmp;
+		}
+		else if((szStr[i] >= 'A') && (szStr[i] <='F'))
+		{
+			uint32_t tmp = (uint32_t)(szStr[i] - 'A') + 10u;
+			u32Val *= u32Base;
+			u32Val += tmp;
+		}
+		else
+		{
+			/* NOP */
+		}
+		i++;
+	}
+
+	return u32Val;
+}
+
+
+/**
+ * @brief strtoull
+ * @param [in] szStr (!= NULL)
+ * @param [in] u32Base (10 or 16)
+ * @param [in] u32BufSize sizeof(szStr) (!= 0)
+ * @return uint64_t
+ */
+static inline uint64_t mimic_strtoull(const TCHAR szStr[], const uint32_t u32BufSize, const uint32_t u32Base)
+{
+	uint64_t u64Val = 0;
+	uint32_t i=0;
+	if((szStr == NULL) || (u32BufSize == 0u) || ((u32Base != 10u) && (u32Base != 16u)))
+	{
+		return 0;
+	}
+	while(szStr[i] == ' ')
+	{
+		i++;
+		if(i >= u32BufSize)
+		{
+			return 0;
+		}
+	}
+
+	while((szStr[i] != '\0') && (i < u32BufSize))
+	{
+		if((szStr[i] >= '0') && (szStr[i] <='9'))
+		{
+			uint64_t tmp = (uint64_t)(szStr[i] - '0');
+			u64Val *= u32Base;
+			u64Val += tmp;
+		}
+		else if((szStr[i] >= 'a') && (szStr[i] <='f'))
+		{
+			uint64_t tmp = (uint64_t)(szStr[i] - 'a') + 10u;
+			u64Val *= u32Base;
+			u64Val += tmp;
+		}
+		else if((szStr[i] >= 'A') && (szStr[i] <='F'))
+		{
+			uint64_t tmp = (uint64_t)(szStr[i] - 'A') + 10u;
+			u64Val *= u32Base;
+			u64Val += tmp;
+		}
+		else
+		{
+			/* NOP */
+		}
+		i++;
+	}
+
+	return u64Val;
+}
 /*@} end of group MIMICLIB */
 
 #ifdef __cplusplus

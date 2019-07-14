@@ -221,3 +221,99 @@ TEST(TestFuncGroup, mimic_atof_OK2)
 
     DOUBLES_EQUAL(100.000000, mimic_atof("100.000000", 10), 0.0000001);
 }
+
+TEST(TestFuncGroup, mimic_strtol_INT32_MAX)
+{
+    std::cout << "mimic_strtol_INT32_MAX" << std::endl;
+    LONGS_EQUAL(INT32_MAX, mimic_strtol("2147483647", strlen("2147483647")));
+}
+TEST(TestFuncGroup, mimic_strtol_INT32_MIN)
+{
+    std::cout << "mimic_strtol_INT32_MIN" << std::endl;
+    LONGS_EQUAL(INT32_MIN, mimic_strtol("-2147483648", strlen("-2147483648")));
+}
+TEST(TestFuncGroup, mimic_strtol_INT32_0)
+{
+    std::cout << "mimic_strtol_INT32_0" << std::endl;
+    LONGS_EQUAL(0, mimic_strtol("0", strlen("0")));
+}
+TEST(TestFuncGroup, mimic_strtol_INT32_p1)
+{
+    std::cout << "mimic_strtol_INT32_p1" << std::endl;
+    LONGS_EQUAL(1, mimic_strtol("1", strlen("1")));
+}
+TEST(TestFuncGroup, mimic_strtol_INT32_m1)
+{
+    std::cout << "mimic_strtol_INT32_m1" << std::endl;
+    LONGS_EQUAL(-1, mimic_strtol("-1", strlen("-1")));
+}
+
+
+TEST(TestFuncGroup, mimic_strtoll_INT64_MAX)
+{
+    std::cout << "mimic_strtol_INT64_MAX" << std::endl;
+    LONGLONGS_EQUAL(INT64_MAX, mimic_strtoll("9223372036854775807", strlen("9223372036854775807")));
+}
+TEST(TestFuncGroup, mimic_strtoll_INT64_MIN)
+{
+    std::cout << "mimic_strtol_INT64_MIN" << std::endl;
+    LONGLONGS_EQUAL(INT64_MIN, mimic_strtoll("-9223372036854775808", strlen("-9223372036854775808")));
+}
+TEST(TestFuncGroup, mimic_strtoll_INT64_0)
+{
+    std::cout << "mimic_strtol_INT64_0" << std::endl;
+    LONGLONGS_EQUAL(0ll, mimic_strtoll("0", strlen("0")));
+}
+TEST(TestFuncGroup, mimic_strtoll_INT64_p1)
+{
+    std::cout << "mimic_strtol_INT64_p1" << std::endl;
+    LONGLONGS_EQUAL(1ll, mimic_strtoll("1", strlen("1")));
+}
+TEST(TestFuncGroup, mimic_strtoll_INT64_m1)
+{
+    std::cout << "mimic_strtol_INT64_m1" << std::endl;
+    LONGLONGS_EQUAL(-1ll, mimic_strtoll("-1", strlen("-1")));
+}
+
+
+TEST(TestFuncGroup, mimic_strtoul_UINT32_MAX)
+{
+    std::cout << "mimic_strtoul_UINT32_MAX" << std::endl;
+    UNSIGNED_LONGS_EQUAL(UINT32_MAX, mimic_strtoul("4294967295", strlen("4294967295"), 10));
+}
+TEST(TestFuncGroup, mimic_strtoul_UINT32_MAX_Hex)
+{
+    std::cout << "mimic_strtoul_UINT32_MAX_Hex" << std::endl;
+    UNSIGNED_LONGS_EQUAL(UINT32_MAX, mimic_strtoul("FFFFFFFF", strlen("FFFFFFFF"), 16));
+}
+TEST(TestFuncGroup, mimic_strtoul_UINT32_0)
+{
+    std::cout << "mimic_strtoul_UINT32_0" << std::endl;
+    UNSIGNED_LONGS_EQUAL(0u, mimic_strtoul("0", strlen("0"), 10));
+}
+TEST(TestFuncGroup, mimic_strtoul_UINT32_p1)
+{
+    std::cout << "mimic_strtoul_UINT32_p1" << std::endl;
+    UNSIGNED_LONGS_EQUAL(1u, mimic_strtoul("1", strlen("1"), 10));
+}
+
+TEST(TestFuncGroup, mimic_strtoull_UINT64_MAX)
+{
+    std::cout << "mimic_strtoull_UINT64_MAX" << std::endl;
+    UNSIGNED_LONGLONGS_EQUAL(UINT64_MAX, mimic_strtoull("18446744073709551615", strlen("18446744073709551615"), 10));
+}
+TEST(TestFuncGroup, mimic_strtoull_UINT64_MAX_Hex)
+{
+    std::cout << "mimic_strtoull_UINT64_MAX_Hex" << std::endl;
+    UNSIGNED_LONGLONGS_EQUAL(UINT64_MAX, mimic_strtoull("FFFFFFFFFFFFFFFF", strlen("FFFFFFFFFFFFFFFF"), 16));
+}
+TEST(TestFuncGroup, mimic_strtoull_UINT64_0)
+{
+    std::cout << "mimic_strtoull_UINT64_0" << std::endl;
+    UNSIGNED_LONGLONGS_EQUAL(0ull, mimic_strtoull("0", strlen("0"), 10));
+}
+TEST(TestFuncGroup, mimic_strtoull_UINT64_p1)
+{
+    std::cout << "mimic_strtoull_UINT64_p1" << std::endl;
+    UNSIGNED_LONGLONGS_EQUAL(1ull, mimic_strtoull("1", strlen("1"), 10));
+}
