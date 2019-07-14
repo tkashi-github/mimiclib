@@ -6,7 +6,7 @@
 		{
             "label": "misra",
             "type": "shell",
-            "command": "${workspaceFolder}\\misra_check\\static-analyze\\misra_chk.bat ${workspaceFolder}\\misra_check\\static-analyze ${file}",
+            "command": "${workspaceFolder}\\MISRA-C_Check\\static-analyze\\misra_chk.bat ${workspaceFolder}\\MISRA-C_Check\\static-analyze ${file}",
             "problemMatcher": []
 		}
 	]
