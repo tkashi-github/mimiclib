@@ -2,8 +2,8 @@
  * @file		mimiclib.h
  * @brief		mimiclib is insteadof stdio.h, stdlib.h and string.h
  * @author		Takashi Kashiwagi
- * @date		2019/6/24
- * @version     0.4.3
+ * @date		2019/7/14
+ * @version     0.5.0
  * @details 
  * --
  * License Type (MIT License)
@@ -33,6 +33,7 @@
  * - 2019/05/19: Takashi Kashiwagi: v0.3.1
  * - 2019/06/17: Takashi Kashiwagi: v0.4.0
  * - 2019/06/24: Takashi Kashiwagi: v0.4.3
+ * - 2019/07/14: Takashi Kashiwagi: v0.5.0
  */
 #ifndef __cplusplus
 #if __STDC_VERSION__ < 201112L
