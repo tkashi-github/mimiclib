@@ -221,7 +221,24 @@ static inline char *mimic_tcsupper(TCHAR szStr[]){
 	}
 	return szStr;
 }
-
+/**
+ * @brief tcsupper
+ * @param [in] szStr NULL Terminate String
+ * @return void
+ */
+static inline char *mimic_tcslowwer(TCHAR szStr[]){
+	if(szStr != NULL){
+		uint32_t i=0;
+		while(szStr[i] != '\0'){
+			if((szStr[i] >= 'A') && (szStr[i] <= 'Z')){
+				szStr[i] += 'a';
+				szStr[i] -= 'A';
+			}
+			i++;
+		}
+	}
+	return szStr;
+}
 
 /**
  * @brief memcmp

@@ -317,3 +317,26 @@ TEST(TestFuncGroup, mimic_strtoull_UINT64_p1)
     std::cout << "mimic_strtoull_UINT64_p1" << std::endl;
     UNSIGNED_LONGLONGS_EQUAL(1ull, mimic_strtoull("1", strlen("1"), 10));
 }
+
+TEST(TestFuncGroup, mimic_strupper_OK)
+{
+    char szStr[] = {'a', 'b', 'c', 'd', 'e','\0'};
+    std::cout << "mimic_strupper_OK" << std::endl;
+    STRCMP_EQUAL("ABCDE", mimic_strupper(szStr));
+}
+TEST(TestFuncGroup, mimic_strupper_NG)
+{
+    std::cout << "mimic_strupper_NG" << std::endl;
+    CHECK_EQUAL(NULL, mimic_strupper(NULL));
+}
+TEST(TestFuncGroup, mimic_tcslowwer_OK)
+{
+    char szStr[] = {'A', 'B', 'C', 'D', 'E','\0'};
+    std::cout << "mimic_tcslowwer_OK" << std::endl;
+    STRCMP_EQUAL("abcde", mimic_tcslowwer(szStr));
+}
+TEST(TestFuncGroup, mimic_tcslowwer_NG)
+{
+    std::cout << "mimic_tcslowwer_NG" << std::endl;
+    CHECK_EQUAL(NULL, mimic_tcslowwer(NULL));
+}
