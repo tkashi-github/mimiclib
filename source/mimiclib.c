@@ -311,7 +311,7 @@ void mimic_tcsvprintf(
 						{
 							mimic_ltoa((int32_t)va_arg(arg, int32_t), vstr, sizeof(vstr));
 						}
-						vlen = mimic_tcslen(vstr);
+						vlen = mimic_tcslen(vstr, sizeof(vstr));
 					}
 					else if ((ch == (TCHAR)'f') || (ch == (TCHAR)'F'))
 					{
@@ -323,7 +323,7 @@ void mimic_tcsvprintf(
 						{
 							mimic_ftoa((double)va_arg(arg, double), vstr, sizeof(vstr), u32PrecisionWidth);
 						}
-						vlen = mimic_tcslen(vstr);
+						vlen = mimic_tcslen(vstr, sizeof(vstr));
 					}
 					else if ((ch == (TCHAR)'X') || (ch == (TCHAR)'x'))
 					{
@@ -335,7 +335,7 @@ void mimic_tcsvprintf(
 						{
 							mimic_ultoa((uint32_t)va_arg(arg, uint32_t), vstr, sizeof(vstr), 16);
 						}
-						vlen = mimic_tcslen(vstr);
+						vlen = mimic_tcslen(vstr, sizeof(vstr));
 					}
 					else if ((ch == (TCHAR)'U') || (ch == (TCHAR)'u'))
 					{
@@ -347,7 +347,7 @@ void mimic_tcsvprintf(
 						{
 							mimic_ultoa((uint32_t)va_arg(arg, uint32_t), vstr, sizeof(vstr), 10);
 						}
-						vlen = mimic_tcslen(vstr);
+						vlen = mimic_tcslen(vstr, sizeof(vstr));
 					}
 					else
 					{
@@ -409,11 +409,11 @@ void mimic_tcsvprintf(
 						if (bValidFlagsWidth == false)
 						{
 							mimic_tcscat(&szDst[u32Cnt], u32MaxElementOfszDst - u32Cnt, psz);
-							u32Cnt += mimic_tcslen(psz);
+							u32Cnt += mimic_tcslen(psz, 256);
 						}
 						else
 						{
-							vlen = mimic_tcslen(psz);
+							vlen = mimic_tcslen(psz, 256);
 							if (vlen > u32FlagsWidth)
 							{
 								for (uint32_t i = 0; i < u32FlagsWidth; i++)

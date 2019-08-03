@@ -72,7 +72,34 @@ TEST_GROUP(TestFuncGroup)
     }
 };
 
-// テストを実行するメソッド
+// memcmp - start
+TEST(TestFuncGroup, mimic_strlen_OK_1)
+{
+    std::cout << "mimic_strlen OK_1 TEST" << std::endl;
+    CHECK_EQUAL(1, mimic_strlen("0", 2));
+}
+TEST(TestFuncGroup, mimic_strlen_OK_2)
+{
+    std::cout << "mimic_strlen OK_2 TEST" << std::endl;
+    CHECK_EQUAL(0, mimic_strlen("", 1));
+}
+TEST(TestFuncGroup, mimic_tcslen_0)
+{
+    std::cout << "mimic_tcslen("") == 0 Test" << std::endl;
+    CHECK_EQUAL(0, mimic_tcslen("", 1));
+}
+TEST(TestFuncGroup, mimic_tcslen_1)
+{
+    std::cout << "mimic_tcslen("") == 1 Test" << std::endl;
+    CHECK_EQUAL(1, mimic_tcslen("1", 2));
+}
+TEST(TestFuncGroup, mimic_tcslen_10)
+{
+    std::cout << "mimic_tcslen("") == 10 Test" << std::endl;
+    CHECK_EQUAL(10, mimic_tcslen("0123456789", 11));
+}
+
+// memcmp - start
 TEST(TestFuncGroup, mimic_memcmp_false)
 {
     std::cout << "mimic_memcmp : false Test" << std::endl;
@@ -83,7 +110,7 @@ TEST(TestFuncGroup, mimic_memcmp_true)
     std::cout << "mimic_memcmp : true Test" << std::endl;
     CHECK_EQUAL(true, mimic_memcmp((uintptr_t)"00", (uintptr_t)"00", 2));
 }
-
+// memcmp - end 
 TEST(TestFuncGroup, mimic_mimic_strcmp_enStr1ltStr2_1)
 {
     std::cout << "mimic_mimic_strcmp == enStr1ltStr2_1 Test" << std::endl;
@@ -156,21 +183,7 @@ TEST(TestFuncGroup, mimic_mimic_strcmp_enArgmentError_2)
     CHECK_EQUAL(enArgmentError, mimic_strcmp("0123456789", NULL, 10));
 }
 
-TEST(TestFuncGroup, mimic_tcslen_0)
-{
-    std::cout << "mimic_tcslen("") == 0 Test" << std::endl;
-    CHECK_EQUAL(0, mimic_tcslen(""));
-}
-TEST(TestFuncGroup, mimic_tcslen_1)
-{
-    std::cout << "mimic_tcslen("") == 1 Test" << std::endl;
-    CHECK_EQUAL(1, mimic_tcslen("1"));
-}
-TEST(TestFuncGroup, mimic_tcslen_10)
-{
-    std::cout << "mimic_tcslen("") == 10 Test" << std::endl;
-    CHECK_EQUAL(10, mimic_tcslen("0123456789"));
-}
+
 
 TEST(TestFuncGroup, mimic_sprintf_HelloWorld_OK)
 {
