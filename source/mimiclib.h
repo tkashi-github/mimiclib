@@ -72,6 +72,8 @@ extern "C"
  * @brief UTF8 Mode
  */
 typedef char TCHAR;
+#define _T(x) u8 ## x
+#define _TEXT(x) u8 ## x
 #endif
 
 /** \defgroup MIMICLIB mimic library
