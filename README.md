@@ -25,5 +25,8 @@ _Bool MIMICLIB_kbhit(void);
  ## Change log
  See the [CAHNGELOG.md](https://github.com/tkashi-github/mimiclib/blob/master/CHANGELOG.md).
 
-# !!Tab is 4!!
+# Style
+- indent is TAB
+- 1 tab == 4 spaces
+- UTF8 encoding
  
