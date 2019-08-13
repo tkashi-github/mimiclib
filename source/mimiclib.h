@@ -99,7 +99,7 @@ void MIMICLIB_PutChar(TCHAR ch);
  * @param [in] pszStr NULL Terminate String
  * @return void
  */
-void MIMICLIB_PutString(const TCHAR pszStr[]);
+void MIMICLIB_PutString(const TCHAR pszStr[], uint32_t SizeofStr);
 
 /**
  * @brief kbhits

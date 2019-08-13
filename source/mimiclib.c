@@ -129,7 +129,7 @@ void mimic_printf(const char *fmt, ...)
 	mimic_tcsvprintf(szBuffer, sizeof(szBuffer), fmt, arg);
 	va_end(arg);
 
-	MIMICLIB_PutString(szBuffer);
+	MIMICLIB_PutString(szBuffer,sizeof(szBuffer));
 }
 void mimic_sprintf(TCHAR pszStr[], uint32_t u32MaxElementOfszDst, const char* fmt, ...)
 {
