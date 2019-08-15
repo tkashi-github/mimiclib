@@ -52,7 +52,7 @@ void MIMICLIB_PutChar(TCHAR ch)
 	putc(ch, stdout);
 }
 
-void MIMICLIB_PutString(const TCHAR pszStr[])
+void MIMICLIB_PutString(const TCHAR pszStr[], uint32_t SizeofStr)
 {
 	fputs(pszStr, stdout);
 }

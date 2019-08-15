@@ -390,3 +390,18 @@ TEST(TestFuncGroup, mimic_tcslowwer_NG)
     std::cout << "mimic_tcslowwer_NG" << std::endl;
     CHECK_EQUAL(NULL, mimic_tcslowwer(NULL));
 }
+
+
+TEST(TestFuncGroup, mimic_strtok)
+{
+    std::cout << "mimic_strtok" << std::endl;
+
+    char szStr[256];
+    char *ctx;
+    mimic_strcpy(szStr, "ABC 123456\r\n", sizeof(szStr));
+
+    STRCMP_EQUAL("ABC", mimic_strtok(szStr, sizeof(szStr), " " , sizeof(" "), &ctx));
+    STRCMP_EQUAL("123456\r\n", mimic_strtok(NULL, sizeof(szStr), " " , sizeof(" "), &ctx));
+    CHECK_EQUAL(NULL, mimic_strtok(NULL, sizeof(szStr), " " , sizeof(" "), &ctx));
+    
+}
