@@ -351,19 +351,23 @@ static inline _Bool mimic_memset(uintptr_t p1, uint8_t val, uint32_t u32ByteCnt)
 /**
  * @brief strtok_r
  * @param [in] szStr Target String
+ * @param [inout] pSizeOfStr sizeof szStr / sizeof(char)
  * @param [in] szDelm Delemiter
- * @param [in] ctx 
+ * @param [in] SizeOfDelm SizeOfszDelm / sizeof(char)
+ * @param [inout] ctx 
  * @return char* 
  */
 extern char *mimic_strtok(char szStr[], uint32_t *pSizeOfStr, const char szDelm[], const uint32_t SizeOfDelm, char **ctx);
 /**
  * @brief tcstok_r
  * @param [in] szStr Target String
+ * @param [inout] pSizeOfStr sizeof szStr / sizeof(TCHAR)
  * @param [in] szDelm Delemiter
- * @param [in] ctx 
- * @return char* 
+ * @param [in] SizeOfDelm SizeOfszDelm / sizeof(TCHAR)
+ * @param [inout] ctx 
+ * @return TCHAR* 
  */
-extern TCHAR *mimic_tcstok(TCHAR szStr[], const TCHAR szDelm[], const uint32_t SizeOfDelm, TCHAR **ctx);
+extern TCHAR *mimic_tcstok(TCHAR szStr[], uint32_t *pSizeOfStr, const TCHAR szDelm[], const uint32_t SizeOfDelm, TCHAR **ctx);
 
 /**
  * @brief isprint
