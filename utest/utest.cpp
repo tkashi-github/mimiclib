@@ -397,11 +397,16 @@ TEST(TestFuncGroup, mimic_strtok)
     std::cout << "mimic_strtok" << std::endl;
 
     char szStr[256];
+    uint32_t u32BufSize = 256;
     char *ctx;
-    mimic_strcpy(szStr, "ABC 123456\r\n", sizeof(szStr));
+    mimic_strcpy(szStr, "ABC 123456 xyz\r\n", sizeof(szStr));
 
-    STRCMP_EQUAL("ABC", mimic_strtok(szStr, sizeof(szStr), " " , sizeof(" "), &ctx));
-    STRCMP_EQUAL("123456\r\n", mimic_strtok(NULL, sizeof(szStr), " " , sizeof(" "), &ctx));
-    CHECK_EQUAL(NULL, mimic_strtok(NULL, sizeof(szStr), " " , sizeof(" "), &ctx));
-    
+    STRCMP_EQUAL("ABC", mimic_strtok(szStr, &u32BufSize, " " , sizeof(" "), &ctx));
+    CHECK_EQUAL(253, u32BufSize);
+    STRCMP_EQUAL("123456", mimic_strtok(NULL, &u32BufSize, " " , sizeof(" "), &ctx));
+    CHECK_EQUAL(247, u32BufSize);
+    STRCMP_EQUAL("xyz\r\n", mimic_strtok(NULL, &u32BufSize, " " , sizeof(" "), &ctx));
+    CHECK_EQUAL(242, u32BufSize);
+    CHECK_EQUAL(NULL, mimic_strtok(NULL, &u32BufSize, " " , sizeof(" "), &ctx));
+    CHECK_EQUAL(242, u32BufSize);
 }

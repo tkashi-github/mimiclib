@@ -355,7 +355,7 @@ static inline _Bool mimic_memset(uintptr_t p1, uint8_t val, uint32_t u32ByteCnt)
  * @param [in] ctx 
  * @return char* 
  */
-extern char *mimic_strtok(char szStr[], const uint32_t SizeOfStr, const char szDelm[], const uint32_t SizeOfDelm, char **ctx);
+extern char *mimic_strtok(char szStr[], uint32_t *pSizeOfStr, const char szDelm[], const uint32_t SizeOfDelm, char **ctx);
 /**
  * @brief tcstok_r
  * @param [in] szStr Target String
