@@ -862,10 +862,7 @@ TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32_t u32MaxEleme
 	for (;;)
 	{
 		dfpTemp *= 10.0;
-		if (u32PrecCnt >= (precision_width - 1))
-		{
-			dfpTemp += 0.5;
-		}
+
 		uint32_t u32Z = (uint32_t)dfpTemp;
 		dfpTemp -= (double)u32Z;
 
