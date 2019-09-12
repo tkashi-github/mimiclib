@@ -85,28 +85,42 @@ typedef char TCHAR;
  * @param [out] ch Received character
  * @return void
  */
-void MIMICLIB_GetChar(TCHAR *ch);
+extern void MIMICLIB_GetChar(TCHAR *ch);
 
 /**
  * @brief putc (Blocking)
  * @param [in] ch character
  * @return void
  */
-void MIMICLIB_PutChar(TCHAR ch);
+extern void MIMICLIB_PutChar(TCHAR ch);
 
 /**
  * @brief puts (with Semapore)
  * @param [in] pszStr NULL Terminate String
  * @return void
  */
-void MIMICLIB_PutString(const TCHAR pszStr[], uint32_t SizeofStr);
+extern void MIMICLIB_PutString(const TCHAR pszStr[], uint32_t SizeofStr);
 
 /**
  * @brief kbhits
  * @return true There are some characters in Buffer
  * @return false There are no characters in Buffer
  */
-_Bool MIMICLIB_kbhit(void);
+extern _Bool MIMICLIB_kbhit(void);
+
+/**
+ * @brief malloc
+ * @param [in] u32Size alloc size
+ * @return uintptr_t memory
+ */
+extern uintptr_t MIMICLIB_MALLOC(uint32_t u32Size);
+
+/**
+ * @brief free
+ * @param [in] ptr alloc size
+ * @return void
+ */
+extern void MIMICLIB_FREE(uintptr_t ptr);
 
 /**
  * @brief strlen

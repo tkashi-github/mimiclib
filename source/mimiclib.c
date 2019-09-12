@@ -61,6 +61,16 @@ _Bool MIMICLIB_kbhit(void)
 {
 	return true;
 }
+
+uintptr_t MIMICLIB_MALLOC(uint32_t u32Size)
+{
+	return (uintptr_t)malloc(u32Size);
+}
+
+void MIMICLIB_FREE(uintptr_t ptr)
+{
+	free(ptr);
+}
 #endif
 
 uint32_t mimic_gets(char pszStr[], uint32_t u32Size)
@@ -123,13 +133,17 @@ _Bool mimic_kbhit(void)
 void mimic_printf(const char *fmt, ...)
 {
 	va_list arg;
-	char szBuffer[512];
+	char *pszBuffer = (char *)MIMICLIB_MALLOC(4096);
 
-	va_start(arg, fmt);
-	mimic_tcsvprintf(szBuffer, sizeof(szBuffer), fmt, arg);
-	va_end(arg);
+	if(pszBuffer != NULL)
+	{
+		va_start(arg, fmt);
+		mimic_tcsvprintf(pszBuffer, 4096, fmt, arg);
+		va_end(arg);
 
-	MIMICLIB_PutString(szBuffer,sizeof(szBuffer));
+		MIMICLIB_PutString(pszBuffer, 4096);
+		MIMICLIB_FREE((uintptr_t)pszBuffer);
+	}
 }
 void mimic_sprintf(TCHAR pszStr[], uint32_t u32MaxElementOfszDst, const char* fmt, ...)
 {
