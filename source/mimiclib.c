@@ -484,13 +484,13 @@ void mimic_tcsvprintf(
 	return;
 }
 
-char *mimic_strtok(char szStr[], const uint32_t SizeOfStr, const char szDelm[], const uint32_t SizeOfDelm, char **ctx)
+char *mimic_strtok(char szStr[], uint32_t *pSizeOfStr, const char szDelm[], const uint32_t SizeOfDelm, char **ctx)
 {
 	/*-- var --*/
 	char *pret = NULL;
 
 	/*-- begin --*/
-	if (szDelm != (char *)NULL)
+	if((szDelm != (char *)NULL) && (pSizeOfStr != NULL))
 	{
 		char *pszTmp;
 		uint32_t u32 = 0u;
@@ -504,7 +504,9 @@ char *mimic_strtok(char szStr[], const uint32_t SizeOfStr, const char szDelm[], 
 		{
 			pszTmp = szStr;
 		}
-		if (pszTmp[0] != '\0')
+
+
+		if ((pszTmp != NULL) && (pszTmp[0] != '\0'))
 		{
 			pret = pszTmp;
 			while (pszTmp[u32] != '\0')
@@ -514,26 +516,43 @@ char *mimic_strtok(char szStr[], const uint32_t SizeOfStr, const char szDelm[], 
 				{
 					pszTmp[u32] = '\0';
 					pret = pszTmp;
-					break;
+					if(*pSizeOfStr >= u32)
+					{
+						*pSizeOfStr = *pSizeOfStr - u32;
+					}
+					else
+					{
+						*pSizeOfStr = 0;
+					}
+					goto _END;
 				}
 				u32++;
-				if(u32 >= SizeOfStr)
+				if(u32 >= *pSizeOfStr)
 				{
-					break;
+					goto _END;
 				}
+			}
+			if(*pSizeOfStr >= u32)
+			{
+				*pSizeOfStr = *pSizeOfStr - u32;
+			}
+			else
+			{
+				*pSizeOfStr = 0;
 			}
 		}
 	}
+_END:	
 	return pret;
 }
 
-TCHAR *mimic_tcstok(TCHAR szStr[], const TCHAR szDelm[], const uint32_t SizeOfDelm, TCHAR **ctx)
+TCHAR *mimic_tcstok(TCHAR szStr[], uint32_t *pSizeOfStr, const TCHAR szDelm[], const uint32_t SizeOfDelm, TCHAR **ctx)
 {
 	/*-- var --*/
 	TCHAR *pret = NULL;
 
 	/*-- begin --*/
-	if (szDelm != NULL)
+	if((szDelm != (TCHAR *)NULL) && (pSizeOfStr != NULL))
 	{
 		TCHAR *pszTmp;
 		uint32_t u32 = 0u;
@@ -547,22 +566,45 @@ TCHAR *mimic_tcstok(TCHAR szStr[], const TCHAR szDelm[], const uint32_t SizeOfDe
 		{
 			pszTmp = szStr;
 		}
-		if (pszTmp[0] != (TCHAR)'\0')
+
+
+		if ((pszTmp != NULL) && (pszTmp[0] != '\0'))
 		{
 			pret = pszTmp;
-			while (pszTmp[u32] != (TCHAR)'\0')
+			while (pszTmp[u32] != '\0')
 			{
 				*ctx = &pszTmp[u32 + delmLen];
-				if (mimic_memcmp((uintptr_t)&pszTmp[u32], (uintptr_t)szDelm, sizeof(TCHAR) * delmLen) != false)
+				if (mimic_memcmp((uintptr_t)&pszTmp[u32], (uintptr_t)szDelm, delmLen) != false)
 				{
-					pszTmp[u32] = (TCHAR)'\0';
+					pszTmp[u32] = '\0';
 					pret = pszTmp;
-					break;
+					if(*pSizeOfStr >= u32)
+					{
+						*pSizeOfStr = *pSizeOfStr - u32;
+					}
+					else
+					{
+						*pSizeOfStr = 0;
+					}
+					goto _END;
 				}
 				u32++;
+				if(u32 >= *pSizeOfStr)
+				{
+					goto _END;
+				}
+			}
+			if(*pSizeOfStr >= u32)
+			{
+				*pSizeOfStr = *pSizeOfStr - u32;
+			}
+			else
+			{
+				*pSizeOfStr = 0;
 			}
 		}
 	}
+_END:	
 	return pret;
 }
 
@@ -834,10 +876,7 @@ TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32_t u32MaxEleme
 	for (;;)
 	{
 		dfpTemp *= 10.0;
-		if (u32PrecCnt >= (precision_width - 1))
-		{
-			dfpTemp += 0.5;
-		}
+
 		uint32_t u32Z = (uint32_t)dfpTemp;
 		dfpTemp -= (double)u32Z;
 
