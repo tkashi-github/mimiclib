@@ -7,3 +7,7 @@ cmake_install.cmake
 .vscode/ipch
 doxygen/html
 misra_check
+/Debug/
+.cproject
+.project
+.settings
