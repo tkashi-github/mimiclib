@@ -211,10 +211,10 @@ TEST(TestFuncGroup, mimic_sprintf_Float)
 
     memset(szStr, 0, sizeof(szStr));
     std::cout << "mimic_sprintf == \"1.23456\" OKTest" << std::endl;
-    mimic_sprintf(szStr, sizeof(szStr), "%d %d %u %.5f", INT32_MIN, INT32_MAX, UINT32_MAX, 1.23456);
+    mimic_sprintf(szStr, sizeof(szStr), "%d %d %u %.5f %.6f", INT32_MIN, INT32_MAX, UINT32_MAX, 1.23456, 0.99999999);
 
     std::cout << szStr << std::endl;
-    STRCMP_EQUAL("-2147483648 2147483647 4294967295 1.23456", szStr);
+    STRCMP_EQUAL("-2147483648 2147483647 4294967295 1.23456 0.999999", szStr);
 }
 TEST(TestFuncGroup, mimic_sprintf_Zerofill)
 {
@@ -255,9 +255,9 @@ TEST(TestFuncGroup, mimic_ftoa_1_2)
     char szStr[512];
 
     std::cout << "mimic_ftoa == \"1.2\" OKTest" << std::endl;
-    mimic_ftoa(1.2, szStr, sizeof(szStr), 1);
+    mimic_ftoa(1.234567, szStr, sizeof(szStr),5);
 
-    STRNCMP_EQUAL("1.2", szStr, 3);
+    STRNCMP_EQUAL("1.23456", szStr, 8);
 }
 TEST(TestFuncGroup, mimic_atof_OK_12_3456789)
 {
