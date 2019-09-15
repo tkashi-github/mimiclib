@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - add test code
 
+## [0.6.0] - 2019-09-15
+### add
+- MIMICLIB_MALLOC, MIMICLIB_FREE
+- project files for MCUXpressoIDE
+
+### Fixed
+- mimic_ftoa
+
 ## [0.5.1] - 2019-08-07
 ### add
 - test code
@@ -49,7 +57,8 @@ update headers, unit tests.
 ### Added
  - first version
 
-[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.5.1...HEAD
+[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.6.0...HEAD
+[0.6.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.5.1...release_v0.6.0
 [0.5.1]: https://github.com/tkashi-github/mimiclib/compare/release_v0.5.0...release_v0.5.1
 [0.5.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.2...release_v0.5.0
 [0.4.2]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.1...release_v0.4.2
