@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - add test code
+## [1.0.0] - 2020-02-25
+- v0.6.0 -> v1.0.0
 
 ## [0.6.0] - 2019-09-15
 ### add
@@ -57,7 +59,7 @@ update headers, unit tests.
 ### Added
  - first version
 
-[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v0.6.0...HEAD
+[Unreleased]: https://github.com/tkashi-github/mimiclib/compare/release_v1.0.0...HEAD
 [0.6.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.5.1...release_v0.6.0
 [0.5.1]: https://github.com/tkashi-github/mimiclib/compare/release_v0.5.0...release_v0.5.1
 [0.5.0]: https://github.com/tkashi-github/mimiclib/compare/release_v0.4.2...release_v0.5.0
