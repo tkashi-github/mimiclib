@@ -547,6 +547,55 @@ static inline enRetrunCodeStrCmp_t mimic_tcsncmp(const TCHAR szStr1[], const TCH
 	return enArgmentError;
 }
 
+
+/**
+ * @brief getopt (accept only "-?")
+ * @param [in] argc (!= 0)
+ * @param [in] argv (!= NULL)
+ * @param [in] szOpt (!= NULL) Option codes ( ex. "abcdef" )
+ * @param [out] pcOpt (!= NULL) A matched option code 
+ * @param [inout] pu32Index (!= NULL) 
+ * @return true Opetion codes matched.
+ * @return false Opetion codes did not match. Or argment NG.
+ */
+static inline _Bool mimic_getopt(const uint32_t argc, const char* argv[], const char szOpt[], char *pcOpt, uint32_t *pu32Index)
+{
+	if((argc == 0) || (argv == NULL) || (szOpt == NULL) ||(pcOpt == NULL) || (pu32Index == NULL))
+	{
+		return false;
+	}
+
+	if(argc < *pu32Index)
+	{
+		return false;
+	}
+
+	if(*pu32Index == 0u)
+	{
+		*pu32Index = 1u;
+	}
+
+	for(uint32_t i=*pu32Index;i<argc;i++)
+	{
+		char *pszStr = argv[i];
+		if((pszStr[0] == '-') && (pszStr[2] == '\0'))
+		{
+			uint32_t j = 0u;
+			while((szOpt[j] != '\0') && (j < 1024u))
+			{
+				if(pszStr[1] == szOpt[j])
+				{
+					*pcOpt = pszStr[1];
+					*pu32Index = i+1u;
+					return true;
+				}
+				j++;
+			}
+		}
+	}
+	return false;
+}
+
 /**
  * @brief ltoa
  * @param [in] i32Val
