@@ -27,9 +27,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-#include "mimiclib.h"
+#include "../source/mimiclib.h"
 
-#include "CppUTest/CommandLineTestRunner.h"
+#include "../cpputest/include/CppUTest/CommandLineTestRunner.h"
 
 
 
@@ -409,4 +409,29 @@ TEST(TestFuncGroup, mimic_strtok)
     CHECK_EQUAL(242, u32BufSize);
     CHECK_EQUAL(NULL, mimic_strtok(NULL, &u32BufSize, " " , sizeof(" "), &ctx));
     CHECK_EQUAL(242, u32BufSize);
+}
+
+
+TEST(TestFuncGroup, mimic_getopt)
+{
+    std::cout << "mimic_getopt" << std::endl;
+
+    const char *szStr[] = {
+        "argv0",
+        "-a",
+        "-b",
+        "1",
+        "-c",
+    };
+    char retC;
+    uint32_t u32Index=0;
+    CHECK_EQUAL(true, mimic_getopt(5, szStr, "abc", &retC, &u32Index));
+    CHECK_EQUAL(retC, 'a');
+    CHECK_EQUAL(u32Index, 2);
+    CHECK_EQUAL(true, mimic_getopt(5, szStr, "abc", &retC, &u32Index));
+    CHECK_EQUAL(retC, 'b');
+    CHECK_EQUAL(u32Index, 3);
+    CHECK_EQUAL(true, mimic_getopt(5, szStr, "abc", &retC, &u32Index));
+    CHECK_EQUAL(retC, 'c');
+    CHECK_EQUAL(u32Index, 5);
 }

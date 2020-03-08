@@ -577,7 +577,7 @@ static inline _Bool mimic_getopt(const uint32_t argc, const char* argv[], const 
 
 	for(uint32_t i=*pu32Index;i<argc;i++)
 	{
-		char *pszStr = argv[i];
+		const char *pszStr = argv[i];
 		if((pszStr[0] == '-') && (pszStr[2] == '\0'))
 		{
 			uint32_t j = 0u;
