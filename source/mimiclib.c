@@ -315,7 +315,9 @@ void mimic_tcsvprintf(
 					(ch == (TCHAR)'x') ||
 					(ch == (TCHAR)'X') ||
 					(ch == (TCHAR)'u') ||
-					(ch == (TCHAR)'U'))
+					(ch == (TCHAR)'U') ||
+					(ch == (TCHAR)'p') ||
+					(ch == (TCHAR)'P'))
 				{
 					if ((ch == (TCHAR)'d') || (ch == (TCHAR)'i'))
 					{
@@ -363,6 +365,11 @@ void mimic_tcsvprintf(
 						{
 							mimic_ultoa((uint32_t)va_arg(arg, uint32_t), vstr, sizeof(vstr), 10);
 						}
+						vlen = mimic_tcslen(vstr, sizeof(vstr));
+					}
+					else if ((ch == (TCHAR)'P') || (ch == (TCHAR)'p'))
+					{
+						mimic_ulltoa((uint64_t)va_arg(arg, uintptr_t), vstr, sizeof(vstr), 16);
 						vlen = mimic_tcslen(vstr, sizeof(vstr));
 					}
 					else

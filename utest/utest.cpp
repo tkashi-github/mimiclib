@@ -250,6 +250,17 @@ TEST(TestFuncGroup, mimic_sprintf_right)
     std::cout << szStr << std::endl;
     STRCMP_EQUAL("                test", szStr);
 }
+
+TEST(TestFuncGroup, mimic_sprintf_p)
+{
+    char szStr[512];
+
+    memset(szStr, 0, sizeof(szStr));
+    std::cout << "mimic_sprintf_p" << std::endl;
+    mimic_sprintf(szStr, sizeof(szStr), "%p", (uintptr_t)-1);
+    STRCMP_EQUAL("FFFFFFFFFFFFFFFF", szStr);
+}
+
 TEST(TestFuncGroup, mimic_ftoa_1_2)
 {
     char szStr[512];
