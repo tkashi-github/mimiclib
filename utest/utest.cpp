@@ -216,6 +216,17 @@ TEST(TestFuncGroup, mimic_sprintf_Float)
     std::cout << szStr << std::endl;
     STRCMP_EQUAL("-2147483648 2147483647 4294967295 1.23456 0.999999", szStr);
 }
+TEST(TestFuncGroup, mimic_sprintf_llu)
+{
+    char szStr[512];
+
+    memset(szStr, 0, sizeof(szStr));
+    std::cout << "mimic_sprintf llu" << std::endl;
+    mimic_sprintf(szStr, sizeof(szStr), "%lld %ld %llu %lu", -1ull, INT32_MAX, UINT64_MAX, 1u);
+
+    std::cout << szStr << std::endl;
+    STRCMP_EQUAL("-1 2147483647 18446744073709551615 1", szStr);
+}
 TEST(TestFuncGroup, mimic_sprintf_Zerofill)
 {
     char szStr[512];

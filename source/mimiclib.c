@@ -209,6 +209,7 @@ void mimic_tcsvprintf(
 		}
 		else
 		{
+			u32FlagsUsed = 0u;
 			for (;;)
 			{
 				pszStr++;
