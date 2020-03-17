@@ -9,3 +9,4 @@ doxygen/html
 misra_check
 /Debug/
 .settings
+/mimiclib-cppcheck-build-dir
