@@ -2,8 +2,8 @@
  * @file		mimiclib.c
  * @brief		mimiclib is insteadof stdio.h, stdlib.h and string.h
  * @author		Takashi Kashiwagi
- * @date		2020/02/25
- * @version     v1.0.0
+ * @date		2020/03/12
+ * @version     v1.1.0
  * @details 
  * --
  * License Type (MIT License)
@@ -36,6 +36,7 @@
  * - 2019/07/14: Takashi Kashiwagi: v0.5.0
  * - 2019/09/15: Takashi Kashiwagi: v0.6.0
  * - 2020/02/25: Takashi Kashiwagi: v1.0.0
+ * - 2020/03/12: Takashi Kashiwagi: v1.1.0
  */
 #include "mimiclib.h"
 
@@ -209,6 +210,7 @@ void mimic_tcsvprintf(
 		}
 		else
 		{
+			u32FlagsUsed = 0u;
 			for (;;)
 			{
 				pszStr++;
@@ -315,7 +317,9 @@ void mimic_tcsvprintf(
 					(ch == (TCHAR)'x') ||
 					(ch == (TCHAR)'X') ||
 					(ch == (TCHAR)'u') ||
-					(ch == (TCHAR)'U'))
+					(ch == (TCHAR)'U') ||
+					(ch == (TCHAR)'p') ||
+					(ch == (TCHAR)'P'))
 				{
 					if ((ch == (TCHAR)'d') || (ch == (TCHAR)'i'))
 					{
@@ -363,6 +367,11 @@ void mimic_tcsvprintf(
 						{
 							mimic_ultoa((uint32_t)va_arg(arg, uint32_t), vstr, sizeof(vstr), 10);
 						}
+						vlen = mimic_tcslen(vstr, sizeof(vstr));
+					}
+					else if ((ch == (TCHAR)'P') || (ch == (TCHAR)'p'))
+					{
+						mimic_ulltoa((uint64_t)va_arg(arg, uintptr_t), vstr, sizeof(vstr), 16);
 						vlen = mimic_tcslen(vstr, sizeof(vstr));
 					}
 					else

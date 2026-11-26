@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+    <builddir>mimiclib-cppcheck-build-dir</builddir>
+    <platform>win32W</platform>
+    <analyze-all-vs-configs>false</analyze-all-vs-configs>
+    <check-headers>true</check-headers>
+    <check-unused-templates>false</check-unused-templates>
+    <max-ctu-depth>10</max-ctu-depth>
+    <includedir>
+        <dir name="source/"/>
+    </includedir>
+    <undefines>
+        <undefine>UNIT_TEST</undefine>
+    </undefines>
+    <paths>
+        <dir name="source"/>
+    </paths>
+    <addons>
+        <addon>threadsafety</addon>
+        <addon>y2038</addon>
+        <addon>cert</addon>
+        <addon>misra</addon>
+    </addons>
+</project>
