@@ -40,6 +40,9 @@
  */
 #include "mimiclib.h"
 
+#define MIMICLIB_FTOA_MAX_PRECISION (15u)
+#define MIMICLIB_DBL_UINT64_LIMIT (18446744073709551616.0)
+
 #ifdef UNIT_TEST
 #include <stdio.h>
 #include <stdlib.h>
@@ -835,74 +838,92 @@ TCHAR *mimic_tcscat(TCHAR pszStr1[], uint32_t u32MaxElementOfszStr1, const TCHAR
 	return pszStr1;
 }
 
-TCHAR *mimic_ftoa(const double dfpVal, TCHAR szDst[], const uint32_t u32MaxElementOfszDst, const uint32_t precision_width)
+TCHAR *mimic_ftoa(const double dfpVal, char szDst[], const uint32_t u32MaxElementOfszDst, const uint32_t precision_width)
 {
+	char szInteger[21] = {0};
 	double dfpTemp = dfpVal;
-	uint64_t u64Z;
-	uint32_t u32Pos = 0;
-	uint32_t u32PrecCnt = 0;
+	uint64_t u64Integer;
+	uint64_t u64Fraction;
+	uint64_t u64Scale = 1u;
+	uint32_t u32IntegerLength;
+	uint32_t u32RequiredLength;
+	uint32_t u32Pos = 0u;
+	_Bool bNegative = false;
 
-	if ((szDst == (TCHAR *)NULL) || (u32MaxElementOfszDst == 0) || (precision_width == 0))
+	if ((szDst == NULL) || (u32MaxElementOfszDst == 0u) || (precision_width > MIMICLIB_FTOA_MAX_PRECISION))
+	{
+		return NULL;
+	}
+	if (!((dfpVal > -MIMICLIB_DBL_UINT64_LIMIT) && (dfpVal < MIMICLIB_DBL_UINT64_LIMIT)))
+	{	// NAN
+		return NULL;
+	}
+
+	if (dfpVal < 0.0)
+	{
+		bNegative = true;
+		dfpTemp = -dfpTemp;
+	}
+
+	if (dfpTemp >= MIMICLIB_DBL_UINT64_LIMIT)
 	{
 		return NULL;
 	}
 
-	mimic_memset((uintptr_t)szDst, 0, sizeof(TCHAR) * u32MaxElementOfszDst);
-	if (dfpVal < 0.0)
+	for (uint32_t i = 0u; i < precision_width; i++)
 	{
-		dfpTemp = -dfpVal;
+		u64Scale *= 10u;
 	}
 
-	u64Z = dfpTemp;
-	dfpTemp -= (double)u64Z;
-
-	if (u64Z != 0)
+	u64Integer = (uint64_t)dfpTemp;
+	dfpTemp -= (double)u64Integer;
+	u64Fraction = (uint64_t)((dfpTemp * (double)u64Scale) + 0.5);
+	if (u64Fraction >= u64Scale)
 	{
-		if (dfpVal < 0.0)
+		u64Fraction = 0u;
+		if (u64Integer == UINT64_MAX)
 		{
-			szDst[0] = (TCHAR)'-';
-			mimic_ulltoa(u64Z, &szDst[1], u32MaxElementOfszDst - 1, 10);
+			return NULL;
 		}
-		else
-		{
-			mimic_ulltoa(u64Z, szDst, u32MaxElementOfszDst, 10);
-		}
-
-		u32Pos = mimic_tcslen(szDst, u32MaxElementOfszDst);
+		u64Integer++;
 	}
-	else
+
+	mimic_ulltoa(u64Integer, szInteger, sizeof(szInteger), 10u);	// cppcheck-suppress misra-c2012-17.7 ;実装に必須 ;PASS
+	u32IntegerLength = mimic_strlen(szInteger, sizeof(szInteger));
+	u32RequiredLength = u32IntegerLength + ((bNegative != false) ? 1u : 0u);
+	if (precision_width > 0u)
 	{
-		if (dfpVal < 0.0)
-		{
-			szDst[u32Pos] = (TCHAR)'-';
-			u32Pos++;
-		}
-		szDst[u32Pos] = (TCHAR)'0';
+		u32RequiredLength += precision_width + 1u;
+	}
+	if (u32MaxElementOfszDst <= u32RequiredLength)
+	{
+		return NULL;
+	}
+
+	mimic_memset((uintptr_t)szDst, 0, sizeof(char) * u32MaxElementOfszDst);	// cppcheck-suppress misra-c2012-17.7 ;実装に必須 ;PASS
+	if (bNegative != false)
+	{
+		szDst[u32Pos] = '-';
 		u32Pos++;
 	}
-	szDst[u32Pos] = (TCHAR)'.';
-	u32Pos++;
-	u32PrecCnt = 0;
-
-	for (;;)
+	for (uint32_t i = 0u; i < u32IntegerLength; i++)
 	{
-		dfpTemp *= 10.0;
-
-		uint32_t u32Z = (uint32_t)dfpTemp;
-		dfpTemp -= (double)u32Z;
-
-		szDst[u32Pos] = (TCHAR)u32Z + (TCHAR)'0';
+		szDst[u32Pos] = szInteger[i];
 		u32Pos++;
-		u32PrecCnt++;
-		if ((dfpTemp == 0.0) || (u32PrecCnt >= precision_width))
+	}
+	if (precision_width > 0u)
+	{
+		szDst[u32Pos] = '.';
+		u32Pos++;
+		for (uint32_t i = precision_width; i > 0u; i--)
 		{
-			break;
+			szDst[u32Pos + i - 1u] = (char)((u64Fraction % 10u) + (uint64_t)'0');
+			u64Fraction /= 10u;
 		}
 	}
 
 	return szDst;
 }
-
 double mimic_atof(const TCHAR szStr[], const uint32_t u32BufSize)
 {
 	volatile double dfp = 0.0;
