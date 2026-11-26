@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - add test code
-  
+
+## [1.1.0] - 2021-01-04
+- update MISRA-C_Check (cppcheck v2.3)
+
 ## [1.1.0] - 2020-03-12
 - add mimic_getopt
 - fix conversion modifiers in mimic_tcsvprintf
